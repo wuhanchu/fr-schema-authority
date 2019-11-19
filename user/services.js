@@ -7,7 +7,7 @@ const { createApi, oauth, utils } = frSchema
 const { request } = utils
 
 // 用户
-let users = createApi("v1/users", schemas)
+let users = createApi("users", schemas)
 
 const convertRole = item => {
     return {
@@ -45,7 +45,7 @@ users.queryCurrent = async () => {
  */
 
 users.queryRoleList = async params => {
-    const { list, ...others } = await createApi(`v1/roles`, schemas).get()
+    const { list, ...others } = await createApi(`roles`, schemas).get()
     // const { list, ...others } = data.data
     return {
         list: list.map(item => convertRole(item)),
@@ -54,7 +54,7 @@ users.queryRoleList = async params => {
 }
 
 users.editRole = async params => {
-    const res = await createApi(`v1/user_roles`).put(params)
+    const res = await createApi(`user_roles`).put(params)
     // const { list, ...others } = data.data
     return res
 }
@@ -62,7 +62,7 @@ users.editRole = async params => {
 // users.queryRoleList = async (userID) => {
 //     const response = await request({
 //         method: "GET",
-//         url: `v1/user_roles/${userID}`
+//         url: `user_roles/${userID}`
 //     })
 
 //     return response

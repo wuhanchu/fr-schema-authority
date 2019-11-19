@@ -8,7 +8,7 @@ const { createApi, oauth, utils } = frSchema
 const { request } = utils
 
 // 用户
-let roles = createApi("v1/roles", schemas)
+let roles = createApi("roles", schemas)
 
 const convertRole = item => {
     return {
@@ -16,7 +16,7 @@ const convertRole = item => {
     }
 }
 roles.queryPermissionList = async params => {
-    const res = await createApi(`v1/permissions`, schemas).getBasic({
+    const res = await createApi(`permissions`, schemas).getBasic({
         limit: 100,
         offset: 0,
         sort: "-id"
@@ -29,13 +29,13 @@ roles.queryPermissionList = async params => {
 }
 
 roles.editPermission = async params => {
-    const res = await createApi(`v1/role_permissions`).put(params)
+    const res = await createApi(`role_permissions`).put(params)
     // const { list, ...others } = data.data
     return res
 }
 
 roles.getPermission = async params => {
-    const res = await createApi(`v1/role_permissions/${params}`).getBasic()
+    const res = await createApi(`role_permissions/${params}`).getBasic()
     return res
 }
 
