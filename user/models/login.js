@@ -1,10 +1,10 @@
 import { routerRedux } from "dva/router"
 import { message } from "antd"
 import { stringify } from "qs"
-import { getPageQuery } from "@/utils/utils"
 import services from "../services"
 import { reloadAuthorized } from "@/outter/fr-schema-antd-utils/src/utils/Authorized"
 import { setAuthority } from "@/outter/fr-schema-antd-utils/src/utils/authority"
+import {getPageQuery} from "@/outter/fr-schema-antd-utils/src/utils/utils";
 
 export default {
     namespace: "login",
