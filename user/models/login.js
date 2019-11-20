@@ -4,7 +4,7 @@ import { stringify } from "qs"
 import services from "../services"
 import { reloadAuthorized } from "@/outter/fr-schema-antd-utils/src/utils/Authorized"
 import { setAuthority } from "@/outter/fr-schema-antd-utils/src/utils/authority"
-import {getPageQuery} from "@/outter/fr-schema-antd-utils/src/utils/utils";
+import { getPageQuery } from "@/outter/fr-schema-antd-utils/src/utils/utils"
 
 export default {
     namespace: "login",
@@ -43,12 +43,12 @@ export default {
                         if (redirect.startsWith("/static")) {
                             redirect = redirect.substr(7)
                         }
+                        // yield put(routerRedux.replace(redirect || "/"))
                     } else {
-                        window.location.href = redirect
-                        return
+                        // window.location.href = redirect
                     }
+                    window.location.replace(redirect)
                 }
-                yield put(routerRedux.replace(redirect || "/"))
             }
         },
 

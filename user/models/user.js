@@ -7,6 +7,7 @@ export default {
     namespace: "user",
 
     state: {
+        init: null,
         list: [],
         currentUser: {}
     },
@@ -19,7 +20,7 @@ export default {
                 payload: response
             })
         },
-        *fetchCurrent(_, { call, put, select }) {
+        *fetchCurrent(_, { call, put, select, take }) {
             try {
                 const response = yield call(services.users.queryCurrent)
                 const user = response.data
@@ -48,7 +49,6 @@ export default {
                         permissions.push(item.role_name)
                     })
                 permissions = lodash.uniq(permissions)
-                console.debug("permissions", permissions)
 
                 // 修改登录
                 yield put({
@@ -60,7 +60,15 @@ export default {
                         currentAuthority: [].concat(permissions)
                     }
                 })
+                take("login/changeLoginStatus/@@end")
                 reloadAuthorized()
+
+                yield put({
+                    type: "save",
+                    payload: {
+                        init: true
+                    }
+                })
             } catch (e) {
                 console.log("error", e)
                 message.error(e.message)
@@ -72,7 +80,7 @@ export default {
         save(state, action) {
             return {
                 ...state,
-                list: action.payload
+                ...action.payload
             }
         },
         saveCurrentUser(state, action) {
