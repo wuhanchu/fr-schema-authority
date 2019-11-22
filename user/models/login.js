@@ -49,6 +49,8 @@ export default {
                     }
                     window.location.replace(redirect)
                 }
+
+                window.location.replace("/")
             }
         },
 
