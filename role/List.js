@@ -5,6 +5,7 @@ import { Divider, Modal, Tree, Icon, Card, Input, message, Form } from "antd"
 import { Fragment } from "react"
 import { async } from "q"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
+import FunctionTree from "../permission/components/FunctionTree"
 
 const { ListPage } = antdUtils.components
 const { utils, getPrimaryKey, actions } = frSchema
@@ -83,11 +84,11 @@ class Role extends ListPage {
     }
 
     handleOk = async () => {
-        await this.service.editPermission({
-            id: this.state.record.id,
+        await this.service.putFunctions({
             role_id: this.state.record.id,
-            permission_ids: this.state.permissionDict
+            role_permission_group_ids: this.state.functionIdList
         })
+
         this.refreshList()
         message.success("修改成功")
         this.setState({ editPermissionVisible: false })
@@ -116,16 +117,31 @@ class Role extends ListPage {
 
     renderOperateColumnExtend(record) {
         return (
-            <Authorized authority={"sys_role_permission_put"} noMatch={null}>
-                <Divider type="vertical" />
-                <a
-                    onClick={() => {
-                        this.handleSetPermission(record)
-                    }}
+            <Fragment>
+                <Authorized
+                    authority={"sys_role_permission_put"}
+                    noMatch={null}
                 >
-                    权限分配
-                </a>
-            </Authorized>
+                    <Divider type="vertical" />
+                    <a
+                        onClick={() => {
+                            this.handleSetPermission(record)
+                        }}
+                    >
+                        权限分配
+                    </a>
+                </Authorized>
+                <Authorized noMatch={null}>
+                    <Divider type="vertical" />
+                    <a
+                        onClick={() => {
+                            this.handleSetPermission(record)
+                        }}
+                    >
+                        功能分配
+                    </a>
+                </Authorized>
+            </Fragment>
         )
     }
 
@@ -143,37 +159,27 @@ class Role extends ListPage {
     }
 
     renderExtend() {
-        const TreeNodeList = this.state.showData.map((item, index) => {
-            return <TreeNode title={item.name} key={item.id} />
-        })
         return (
-            <Modal
-                title="分配权限"
-                visible={this.state.editPermissionVisible}
-                onOk={this.handleOk}
-                okText={"授权"}
-                onCancel={() => {
-                    this.setState({ editPermissionVisible: false })
-                }}
-            >
-                <Card
-                    style={{
-                        height: "400px",
-                        overflow: "scroll",
-                        overflowX: false
+            this.state.editPermissionVisible && (
+                <Modal
+                    title="功能分配"
+                    visible={true}
+                    onOk={this.handleOk}
+                    okText={"授权"}
+                    onCancel={() => {
+                        this.setState({ editPermissionVisible: false })
                     }}
                 >
-                    <Input onChange={this.onChangeinput}></Input>
-                    <Tree
-                        checkable
-                        onSelect={this.onSelect}
-                        onCheck={this.onCheck}
-                        checkedKeys={this.state.permissionDict}
-                    >
-                        {TreeNodeList}
-                    </Tree>
-                </Card>
-            </Modal>
+                    <FunctionTree
+                        onChange={functionIdList => {
+                            this.setState({
+                                functionIdList
+                            })
+                        }}
+                        record={this.state.record}
+                    ></FunctionTree>
+                </Modal>
+            )
         )
     }
 

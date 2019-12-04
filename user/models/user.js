@@ -36,6 +36,7 @@ export default {
                         permissions.push(item.name)
                     })
 
+                // todo net version need to delete
                 user.permissions &&
                     user.permissions.forEach(item => {
                         item.key && permissions.push(item.key)
@@ -48,7 +49,16 @@ export default {
                             })
                         permissions.push(item.role_name)
                     })
+
+                // The iteration of function
+                user.permission_groups &&
+                    user.permission_groups.forEach(item => {
+                        item.key && permissions.push(item.key)
+                    })
+
+                // get permission
                 permissions = lodash.uniq(permissions)
+                console.info("permissions", permissions)
 
                 // 修改登录
                 yield put({

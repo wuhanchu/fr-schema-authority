@@ -68,6 +68,16 @@ export default {
         //     editHide: true
         // }
     },
+    function: {
+        group_name: {
+            title: "名称",
+            required: true
+        },
+        key: {
+            title: "菜单KEY",
+            required: true
+        }
+    },
     license: {
         machineCode: {
             title: "机器码",

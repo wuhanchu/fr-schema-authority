@@ -39,6 +39,20 @@ roles.getPermission = async params => {
     return res
 }
 
+roles.putFunctions = async args => {
+    const { role_id, ...others } = args
+    return createApi("role_permission_groups/" + role_id).put(others)
+}
+
+roles.getFunctions = async args => {
+    const { role_id, ...others } = args
+    const { data: list } = await createApi(
+        "role_permission_groups/" + role_id
+    ).getBasic(others)
+
+    return { list }
+}
+
 export default {
     roles
 }

@@ -7,8 +7,9 @@ const { createApi, oauth, utils } = frSchema
 
 const { request } = utils
 
-// 用户
-let permissions = createApi("permissions", schemas)
+// user function
+let permissions = createApi("permissions", schemas.permission)
+let functions = createApi("permission_group", schemas.function)
 
 // 证书
 const license = {}
@@ -19,11 +20,6 @@ license.getMachieCode = createApi("api/admin/registe/getMachineCode", null, {
     skipOauth: true
 }).getBasic // 返回注册码
 
-/**
- *
- * @param args
- * @returns {Promise<void>}
- */
 license.post = async args => {
     const response = await createBasicApi("register/file", null, {
         skipOauth: true
@@ -36,7 +32,9 @@ license.get = createBasicApi("register/license", null, {
     skipOauth: true
 }).get // 上传注册文件
 
+// return
 export default {
     permissions,
+    functions,
     license
 }

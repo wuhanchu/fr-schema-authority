@@ -12,7 +12,7 @@ const { ListPage } = antdUtils.components
  * 通话记录
  */
 @Form.create()
-class Permission extends ListPage {
+class List extends ListPage {
     constructor(props) {
         super(props, {
             schema: schemas.permission,
@@ -74,4 +74,4 @@ class Permission extends ListPage {
     }
 }
 
-export default Permission
+export default List
