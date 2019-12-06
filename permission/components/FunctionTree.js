@@ -159,10 +159,18 @@ export class FunctionTree extends PureComponent {
     deleteNodeData(node, type) {
         let checkedKeys = this.state.checkedKeys
         // let checkedKeysCopy = [...this.state.checkedKeys]
-        if (checkedKeys.indexOf(node.key) != -1 && type=="delete") {
+        if (checkedKeys.indexOf(node.key) != -1) {
             checkedKeys.splice(checkedKeys.indexOf(node.key), 1)
         }
-        if (checkedKeys.indexOf(node.key) == -1 && type=="add") {
+        this.setState({
+            checkedKeys: checkedKeys
+        })
+        console.log(checkedKeys)
+    }
+    addNodeData(node, type) {
+        let checkedKeys = this.state.checkedKeys
+        // let checkedKeysCopy = [...this.state.checkedKeys]
+        if (checkedKeys.indexOf(node.key) == -1) {
             checkedKeys.push(node.key)
         }
         this.setState({
@@ -175,7 +183,13 @@ export class FunctionTree extends PureComponent {
         if (!node) {
             return
         }
-        this.deleteNodeData(node, type)
+        if(type== 'add'){
+            this.addNodeData(node, type)
+        }
+        if(type== 'delete'){
+            this.deleteNodeData(node, type)
+        }
+
         if (node.children && node.children.length > 0) {
             var i = 0
             for (i = 0; i < node.children.length; i++) {
@@ -272,6 +286,7 @@ export class FunctionTree extends PureComponent {
                                 checkStrictly={true}
                                 defaultExpandAll={true}
                                 onCheck={value => {
+                                    console.log(value)
                                     const checkedKeys = value.checked || value
                                     let key = this.diff(
                                         checkedKeys,
@@ -281,22 +296,27 @@ export class FunctionTree extends PureComponent {
                                         checkedKeys,
                                         datas: []
                                     })
+
                                     if (
                                         checkedKeys.length <
-                                        this.state.checkedKeys.length &&
-                                        this.state.checkStrictly
+                                        this.state.checkedKeys.length
+                                        // this.state.checkStrictly
                                     ) {
+                                        console.log("删除")
                                         this.traverseTree(this.data[0], key, 'delete')
-                                    }
-                                    if (
+
+                                    }else if (
                                         checkedKeys.length >
                                         this.state.checkedKeys.length &&
                                         !this.state.checkStrictly
                                     ) {
+                                        console.log("添加")
+
                                         this.traverseTree(this.data[0], key, 'add')
                                     }
 
-                                    console.log(this.state.datas)
+
+                                    console.log(this.state.checkedKeys)
                                     this.setState({
                                         datas: []
                                     })
