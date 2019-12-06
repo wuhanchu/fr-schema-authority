@@ -20,7 +20,8 @@ export class FunctionTree extends PureComponent {
     state = {
         data: null,
         checkStrictly: true,
-        checkedKeys: []
+        checkedKeys: [],
+        datas: []
     }
 
     async init() {
@@ -145,6 +146,73 @@ export class FunctionTree extends PureComponent {
         return result
     }
 
+    // 遍历单个节点
+    traverseNode(node){
+
+        let data = this.state.datas
+
+        data.push(node.key)
+        this.setState({
+            datas: data
+        })
+    }
+
+    deleteNodeData(node){
+        let checkedKeys = this.state.checkedKeys
+        // let checkedKeysCopy = [...this.state.checkedKeys]
+        if(checkedKeys.indexOf(node.key)!= -1){
+            console.log("checkedKeys.indexOf(node.key)",checkedKeys.indexOf(node.key))
+            checkedKeys.splice(checkedKeys.indexOf(node.key),1)
+        }
+        this.setState({
+            checkedKeys: checkedKeys
+        })
+        console.log(checkedKeys)
+    }
+
+    deleteTreeData(node){
+        if (!node) {
+            return;
+        }
+        this.deleteNodeData(node);
+        if (node.children && node.children.length > 0) {
+            var i = 0;
+            for (i = 0; i < node.children.length; i++) {
+                this.deleteTreeData(node.children[i]);
+            }
+        }
+    }
+
+    traverseTree(node, key){
+        if (!node) {
+            return;
+        }
+
+        if(node.key == key){
+            console.log(node)
+            this.deleteTreeData(node)
+        }
+        this.traverseNode(node);
+        if (node.children && node.children.length > 0) {
+            var i = 0;
+            for (i = 0; i < node.children.length; i++) {
+                this.traverseTree(node.children[i], key);
+            }
+        }
+    }
+
+    diff(arr1, arr2) {
+
+      var newArr = [];
+      var arr3=arr1.concat(arr2);//将arr1和arr2合并为arr3
+      function isContain(value){
+          //找出arr3中不存在于arr1和arr2中的元素
+          return arr1.indexOf(value)==-1||arr2.indexOf(value)==-1
+      }
+      newArr = arr3.filter(isContain);
+      return newArr;
+    }
+
     render() {
         // const { showType } = this.props
 
@@ -205,10 +273,21 @@ export class FunctionTree extends PureComponent {
                                 onCheck={value => {
                                     console.debug("handleCheck in value", value)
                                     const checkedKeys = value.checked || value
+                                    console.log(checkedKeys,this.state.checkedKeys)
+                                    let key = this.diff(checkedKeys,this.state.checkedKeys)[0]
                                     this.setState({
-                                        checkedKeys
+                                        checkedKeys,
+                                        datas: []
                                     })
+                                    if(checkedKeys.length < this.state.checkedKeys.length)
+                                    {
+                                        this.traverseTree(this.data[0], key)
+                                    }
 
+                                    console.log(this.state.datas)
+                                    this.setState({
+                                        datas: []
+                                    })
                                     const checkIds = checkedKeys.map(
                                         key => this.functitonMap[key].id
                                     )
