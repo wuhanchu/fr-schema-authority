@@ -156,15 +156,14 @@ export class FunctionTree extends PureComponent {
         })
     }
 
-    deleteNodeData(node) {
+    deleteNodeData(node, type) {
         let checkedKeys = this.state.checkedKeys
         // let checkedKeysCopy = [...this.state.checkedKeys]
-        if (checkedKeys.indexOf(node.key) != -1) {
-            console.log(
-                "checkedKeys.indexOf(node.key)",
-                checkedKeys.indexOf(node.key)
-            )
+        if (checkedKeys.indexOf(node.key) != -1 && type=="delete") {
             checkedKeys.splice(checkedKeys.indexOf(node.key), 1)
+        }
+        if (checkedKeys.indexOf(node.key) == -1 && type=="add") {
+            checkedKeys.push(node.key)
         }
         this.setState({
             checkedKeys: checkedKeys
@@ -172,33 +171,33 @@ export class FunctionTree extends PureComponent {
         console.log(checkedKeys)
     }
 
-    deleteTreeData(node) {
+    deleteTreeData(node, type) {
         if (!node) {
             return
         }
-        this.deleteNodeData(node)
+        this.deleteNodeData(node, type)
         if (node.children && node.children.length > 0) {
             var i = 0
             for (i = 0; i < node.children.length; i++) {
-                this.deleteTreeData(node.children[i])
+                this.deleteTreeData(node.children[i], type)
             }
         }
     }
 
-    traverseTree(node, key) {
+    traverseTree(node, key, type) {
         if (!node) {
             return
         }
 
         if (node.key == key) {
             console.log(node)
-            this.deleteTreeData(node)
+            this.deleteTreeData(node, type)
         }
         this.traverseNode(node)
         if (node.children && node.children.length > 0) {
             var i = 0
             for (i = 0; i < node.children.length; i++) {
-                this.traverseTree(node.children[i], key)
+                this.traverseTree(node.children[i], key, type)
             }
         }
     }
@@ -270,14 +269,10 @@ export class FunctionTree extends PureComponent {
                         >
                             <Tree
                                 checkable
-                                checkStrictly={this.state.checkStrictly}
+                                checkStrictly={true}
                                 defaultExpandAll={true}
                                 onCheck={value => {
                                     const checkedKeys = value.checked || value
-                                    console.log(
-                                        checkedKeys,
-                                        this.state.checkedKeys
-                                    )
                                     let key = this.diff(
                                         checkedKeys,
                                         this.state.checkedKeys
@@ -288,9 +283,17 @@ export class FunctionTree extends PureComponent {
                                     })
                                     if (
                                         checkedKeys.length <
-                                        this.state.checkedKeys.length
+                                        this.state.checkedKeys.length &&
+                                        this.state.checkStrictly
                                     ) {
-                                        this.traverseTree(this.data[0], key)
+                                        this.traverseTree(this.data[0], key, 'delete')
+                                    }
+                                    if (
+                                        checkedKeys.length >
+                                        this.state.checkedKeys.length &&
+                                        !this.state.checkStrictly
+                                    ) {
+                                        this.traverseTree(this.data[0], key, 'add')
                                     }
 
                                     console.log(this.state.datas)
