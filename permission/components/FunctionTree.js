@@ -147,8 +147,7 @@ export class FunctionTree extends PureComponent {
     }
 
     // 遍历单个节点
-    traverseNode(node){
-
+    traverseNode(node) {
         let data = this.state.datas
 
         data.push(node.key)
@@ -157,12 +156,15 @@ export class FunctionTree extends PureComponent {
         })
     }
 
-    deleteNodeData(node){
+    deleteNodeData(node) {
         let checkedKeys = this.state.checkedKeys
         // let checkedKeysCopy = [...this.state.checkedKeys]
-        if(checkedKeys.indexOf(node.key)!= -1){
-            console.log("checkedKeys.indexOf(node.key)",checkedKeys.indexOf(node.key))
-            checkedKeys.splice(checkedKeys.indexOf(node.key),1)
+        if (checkedKeys.indexOf(node.key) != -1) {
+            console.log(
+                "checkedKeys.indexOf(node.key)",
+                checkedKeys.indexOf(node.key)
+            )
+            checkedKeys.splice(checkedKeys.indexOf(node.key), 1)
         }
         this.setState({
             checkedKeys: checkedKeys
@@ -170,47 +172,46 @@ export class FunctionTree extends PureComponent {
         console.log(checkedKeys)
     }
 
-    deleteTreeData(node){
+    deleteTreeData(node) {
         if (!node) {
-            return;
+            return
         }
-        this.deleteNodeData(node);
+        this.deleteNodeData(node)
         if (node.children && node.children.length > 0) {
-            var i = 0;
+            var i = 0
             for (i = 0; i < node.children.length; i++) {
-                this.deleteTreeData(node.children[i]);
+                this.deleteTreeData(node.children[i])
             }
         }
     }
 
-    traverseTree(node, key){
+    traverseTree(node, key) {
         if (!node) {
-            return;
+            return
         }
 
-        if(node.key == key){
+        if (node.key == key) {
             console.log(node)
             this.deleteTreeData(node)
         }
-        this.traverseNode(node);
+        this.traverseNode(node)
         if (node.children && node.children.length > 0) {
-            var i = 0;
+            var i = 0
             for (i = 0; i < node.children.length; i++) {
-                this.traverseTree(node.children[i], key);
+                this.traverseTree(node.children[i], key)
             }
         }
     }
 
     diff(arr1, arr2) {
-
-      var newArr = [];
-      var arr3=arr1.concat(arr2);//将arr1和arr2合并为arr3
-      function isContain(value){
-          //找出arr3中不存在于arr1和arr2中的元素
-          return arr1.indexOf(value)==-1||arr2.indexOf(value)==-1
-      }
-      newArr = arr3.filter(isContain);
-      return newArr;
+        var newArr = []
+        var arr3 = arr1.concat(arr2) //将arr1和arr2合并为arr3
+        function isContain(value) {
+            //找出arr3中不存在于arr1和arr2中的元素
+            return arr1.indexOf(value) == -1 || arr2.indexOf(value) == -1
+        }
+        newArr = arr3.filter(isContain)
+        return newArr
     }
 
     render() {
@@ -231,33 +232,34 @@ export class FunctionTree extends PureComponent {
         return (
             <Fragment>
                 <Row type="flex" justify="space-between">
-                    {/* <Col span={16}> */}
-                    <Input.Search
-                        placeholder="搜索"
-                        onChange={event => {
-                            const value = event.target.value
-                            if (!value) {
-                                return this.setState({ data: this.data })
-                            }
-                            let data = clone(this.data)
-                            this.checkValue(data, value)
-                            this.setState({
-                                data
-                            })
-                        }}
-                    />
-                    {/* </Col> */}
-                    {/* <Col span={4}>
+                    <Col span={16}>
+                        <Input.Search
+                            placeholder="搜索"
+                            size="small"
+                            onChange={event => {
+                                const value = event.target.value
+                                if (!value) {
+                                    return this.setState({ data: this.data })
+                                }
+                                let data = clone(this.data)
+                                this.checkValue(data, value)
+                                this.setState({
+                                    data
+                                })
+                            }}
+                        />
+                    </Col>
+                    <Col span={4}>
                         <Switch
                             checkedChildren="级联"
-                            unCheckedChildren="单独"
+                            unCheckedChildren="单选"
                             onChange={value => {
                                 this.setState({ checkStrictly: !value })
                             }}
                         />
-                    </Col> */}
+                    </Col>
                 </Row>
-                <Divider style={{ marginBottom: 12, marginTop: 18 }}></Divider>
+                <Divider style={{ marginBottom: 4, marginTop: 12 }}></Divider>
                 <Row>
                     {data ? (
                         <div
@@ -271,16 +273,23 @@ export class FunctionTree extends PureComponent {
                                 checkStrictly={this.state.checkStrictly}
                                 defaultExpandAll={true}
                                 onCheck={value => {
-                                    console.debug("handleCheck in value", value)
                                     const checkedKeys = value.checked || value
-                                    console.log(checkedKeys,this.state.checkedKeys)
-                                    let key = this.diff(checkedKeys,this.state.checkedKeys)[0]
+                                    console.log(
+                                        checkedKeys,
+                                        this.state.checkedKeys
+                                    )
+                                    let key = this.diff(
+                                        checkedKeys,
+                                        this.state.checkedKeys
+                                    )[0]
                                     this.setState({
                                         checkedKeys,
                                         datas: []
                                     })
-                                    if(checkedKeys.length < this.state.checkedKeys.length)
-                                    {
+                                    if (
+                                        checkedKeys.length <
+                                        this.state.checkedKeys.length
+                                    ) {
                                         this.traverseTree(this.data[0], key)
                                     }
 
