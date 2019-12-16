@@ -23,6 +23,9 @@ export default {
         *fetchCurrent(_, { call, put, select, take }) {
             try {
                 const response = yield call(services.users.queryCurrent)
+                if (!response) {
+                    return
+                }
                 const user = response.data
                 yield put({
                     type: "saveCurrentUser",
