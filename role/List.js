@@ -84,13 +84,16 @@ class Role extends ListPage {
     }
 
     handleOk = async () => {
-        await this.service.putFunctions({
-            role_id: this.state.record.id,
-            role_permission_group_ids: this.state.functionIdList
-        })
+        if (this.state.functionIdList) {
+            await this.service.putFunctions({
+                role_id: this.state.record.id,
+                role_permission_group_ids: this.state.functionIdList
+            })
 
-        this.refreshList()
-        message.success("修改成功")
+            this.refreshList()
+            message.success("修改成功")
+        }
+
         this.setState({ editPermissionVisible: false })
     }
 

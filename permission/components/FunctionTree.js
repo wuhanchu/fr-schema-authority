@@ -44,12 +44,17 @@ export class FunctionTree extends PureComponent {
             }
         })
 
-        const checkedKeys = (await roleServices.roles.getFunctions({
+        const checkedIds = (await roleServices.roles.getFunctions({
             role_id: roleRecord.id,
             pageSize: 9999
-        })).list.map(item => this.functitonMapById[item.id].key)
+        })).list.map(
+            item => item.id
+        )
+        this.props.onChange && this.props.onChange(checkedIds)
 
-        this.props.onChange && this.props.onChange(checkedKeys)
+        const checkedKeys = checkedIds.map(
+            item => this.functitonMapById[item].key
+        )
 
         console.debug("init functionList", functionList)
         console.debug("init roleFunctionList", checkedKeys)
@@ -183,10 +188,10 @@ export class FunctionTree extends PureComponent {
         if (!node) {
             return
         }
-        if(type== 'add'){
+        if (type == "add") {
             this.addNodeData(node, type)
         }
-        if(type== 'delete'){
+        if (type == "delete") {
             this.deleteNodeData(node, type)
         }
 
@@ -303,18 +308,24 @@ export class FunctionTree extends PureComponent {
                                         // this.state.checkStrictly
                                     ) {
                                         console.log("删除")
-                                        this.traverseTree(this.data[0], key, 'delete')
-
-                                    }else if (
+                                        this.traverseTree(
+                                            this.data[0],
+                                            key,
+                                            "delete"
+                                        )
+                                    } else if (
                                         checkedKeys.length >
-                                        this.state.checkedKeys.length &&
+                                            this.state.checkedKeys.length &&
                                         !this.state.checkStrictly
                                     ) {
                                         console.log("添加")
 
-                                        this.traverseTree(this.data[0], key, 'add')
+                                        this.traverseTree(
+                                            this.data[0],
+                                            key,
+                                            "add"
+                                        )
                                     }
-
 
                                     console.log(this.state.checkedKeys)
                                     this.setState({
