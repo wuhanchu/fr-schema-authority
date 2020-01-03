@@ -2,7 +2,7 @@ import { antdUtils, frSchema } from "@/outter"
 import schemas from "./schemas"
 import services from "./services"
 import { Fragment } from "react"
-import { Divider, Form, message, Select } from "antd"
+import { Divider,Popconfirm , Form, message, Select } from "antd"
 import InfoModal from "@/outter/fr-schema-antd-utils/src/components/Page/InfoModal"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
 
@@ -75,7 +75,7 @@ export class User extends ListPage {
                 fixed: scroll && "right",
                 render: (text, record) => (
                     <Fragment>
-                        {showEdit && (
+                        {showEdit&& !(record.name=="admin") && (
                             <Authorized
                                 authority={
                                     this.meta.authority &&
@@ -96,6 +96,27 @@ export class User extends ListPage {
                                 </a>
                             </Authorized>
                         )}
+                        {showDelete &&!(record.name=="admin") && (
+                            <Authorized
+                                authority={
+                                    this.meta.authority &&
+                                    this.meta.authority.delete
+                                }
+                                noMatch={null}
+                            >
+                                <Divider type="vertical" />
+                                <Popconfirm
+                                    title="是否要删除此行？"
+                                    onConfirm={ async e => {
+                                        await this.service.editRole({ id: record.id, role_ids: [] })
+                                        this.handleDelete(record)
+                                        e.stopPropagation()
+                                    }}
+                                >
+                                    <a>删除</a>
+                                </Popconfirm>
+                            </Authorized>
+                        )}
                         {this.renderOperateColumnExtend(record)}
                     </Fragment>
                 )
@@ -105,6 +126,8 @@ export class User extends ListPage {
 
     // 扩展栏拨号按钮
     renderOperateColumnExtend(record) {
+        if(record.name=="admin")
+            return null
         return (
             <Authorized authority={"sys_user_role_put"} noMatch={null}>
                 <Divider type="vertical" />

@@ -1,7 +1,7 @@
 import { antdUtils, frSchema } from "@/outter"
 import schemas from "./schemas"
 import services from "./services"
-import { Divider, Modal, Tree, Icon, Card, Input, message, Form } from "antd"
+import { Divider, Popconfirm,Modal, Tree, Icon, Card, Input, message, Form } from "antd"
 import { Fragment } from "react"
 import { async } from "q"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
@@ -55,7 +55,7 @@ class Role extends ListPage {
                 fixed: scroll && "right",
                 render: (text, record) => (
                     <Fragment>
-                        {showEdit && (
+                        {showEdit && record.name!="superadmin" && (
                             <Authorized
                                 authority={
                                     this.meta.authority &&
@@ -76,6 +76,30 @@ class Role extends ListPage {
                                 </a>
                             </Authorized>
                         )}
+                        {/* {showDelete && (
+                            <Authorized
+                                authority={
+                                    this.meta.authority &&
+                                    this.meta.authority.delete
+                                }
+                                noMatch={null}
+                            >
+                                <Divider type="vertical" />
+                                <Popconfirm
+                                    title="是否要删除此行？"
+                                    onConfirm={ async e => {
+                                        await this.service.putFunctions({
+                                            role_id: this.state.record.id,
+                                            role_permission_group_ids: []
+                                        })
+                                        this.handleDelete(record)
+                                        e.stopPropagation()
+                                    }}
+                                >
+                                    <a>删除</a>
+                                </Popconfirm>
+                            </Authorized>
+                        )} */}
                         {this.renderOperateColumnExtend(record)}
                     </Fragment>
                 )
@@ -84,13 +108,19 @@ class Role extends ListPage {
     }
 
     handleOk = async () => {
-        await this.service.putFunctions({
-            role_id: this.state.record.id,
-            role_permission_group_ids: this.state.functionIdList
-        })
+
+        try {
+            await this.service.putFunctions({
+                role_id: this.state.record.id,
+                role_permission_group_ids: this.state.functionIdList
+            })
+        } catch (error) {
+            message.error("权限相同")
+        }
+
+
 
         this.refreshList()
-        message.success("修改成功")
         this.setState({ editPermissionVisible: false })
     }
 
@@ -116,6 +146,10 @@ class Role extends ListPage {
     }
 
     renderOperateColumnExtend(record) {
+        if(record.name=="superadmin"){
+            return null
+        }
+        console.log(record.name=="superadmin")
         return (
             <Fragment>
                 <Authorized
@@ -131,8 +165,8 @@ class Role extends ListPage {
                         权限分配
                     </a>
                 </Authorized>
-                <Authorized noMatch={null}>
-                    <Divider type="vertical" />
+                <Authorized authority={"get_role_permissions_sys_role"}>
+                    <Divider type="vertical"/>
                     <a
                         onClick={() => {
                             this.handleSetPermission(record)
