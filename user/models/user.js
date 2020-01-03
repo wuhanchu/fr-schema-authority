@@ -23,9 +23,11 @@ export default {
         *fetchCurrent(_, { call, put, select, take }) {
             try {
                 const response = yield call(services.users.queryCurrent)
-                if (!response) {
-                    return
+
+                if (response instanceof Error) {
+                    throw response
                 }
+
                 const user = response.data
                 yield put({
                     type: "saveCurrentUser",
@@ -84,7 +86,7 @@ export default {
                 })
             } catch (e) {
                 console.log("error", e)
-                message.error(e.message)
+                e.message && message.error(e.message)
             }
         }
     },
