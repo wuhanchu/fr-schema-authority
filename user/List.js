@@ -96,27 +96,7 @@ export class User extends ListPage {
                                 </a>
                             </Authorized>
                         )}
-                        {showDelete &&!(record.name=="admin") && (
-                            <Authorized
-                                authority={
-                                    this.meta.authority &&
-                                    this.meta.authority.delete
-                                }
-                                noMatch={null}
-                            >
-                                <Divider type="vertical" />
-                                <Popconfirm
-                                    title="是否要删除此行？"
-                                    onConfirm={ async e => {
-                                        await this.service.editRole({ id: record.id, role_ids: [] })
-                                        this.handleDelete(record)
-                                        e.stopPropagation()
-                                    }}
-                                >
-                                    <a>删除</a>
-                                </Popconfirm>
-                            </Authorized>
-                        )}
+
                         {this.renderOperateColumnExtend(record)}
                     </Fragment>
                 )
