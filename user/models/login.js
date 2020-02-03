@@ -15,6 +15,9 @@ export default {
 
     effects: {
         *login({ payload }, { call, put, take }) {
+            localStorage.clear()
+            sessionStorage.clear()
+
             let token = null
             token = yield call(services.users.login, payload)
             if (token && token.data) {
