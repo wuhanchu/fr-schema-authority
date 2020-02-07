@@ -29,8 +29,6 @@ class List extends ListPage {
         const { scroll } = this.meta
         const { showEdit = true, showDelete = true } = props
 
-        console.debug("authorityKey", this.meta.authority)
-
         return (
             !this.meta.readOnly &&
             !this.props.readOnly && {
