@@ -17,7 +17,7 @@ class List extends ListPage {
         super(props, {
             schema: schemas.permission,
             service: services.permissions,
-            authorityKey: "sys_permission"
+            // authorityKey: "sys_permission"
         })
     }
 

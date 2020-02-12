@@ -1,6 +1,6 @@
 import React, { Fragment, PureComponent } from "react"
 import { Input, Row, Col, Skeleton, Tree, Switch, Divider } from "antd"
-import Ltt from "list-to-tree"
+// import Ltt from "list-to-tree"
 import services from "../services"
 
 import roleServices from "../../role/services.js"
@@ -53,7 +53,7 @@ export class FunctionTree extends PureComponent {
         // let data = clone(treeData)
         // data.forEach(item => (item.parentNodeId = item.parentNodeId || 0))
 
-        this.data = this.convertToTree(functionList)
+        // this.data = this.convertToTree(functionList)
 
         this.setState({
             data: this.data,
@@ -78,20 +78,20 @@ export class FunctionTree extends PureComponent {
         this.init()
     }
 
-    convertToTree(data) {
-        const ltt = new Ltt(data, {
-            key_id: "key",
-            key_parent: "parent_key",
-            key_child: "children"
-        })
-        ltt.sort((a, b) => {
-            return (
-                (!lodash.isEmpty(a.children) ? 1 : 0) -
-                (!lodash.isEmpty(b.children) ? 1 : 0)
-            )
-        })
-        return ltt.GetTree()
-    }
+    // convertToTree(data) {
+    //     const ltt = new Ltt(data, {
+    //         key_id: "key",
+    //         key_parent: "parent_key",
+    //         key_child: "children"
+    //     })
+    //     ltt.sort((a, b) => {
+    //         return (
+    //             (!lodash.isEmpty(a.children) ? 1 : 0) -
+    //             (!lodash.isEmpty(b.children) ? 1 : 0)
+    //         )
+    //     })
+    //     return ltt.GetTree()
+    // }
 
     renderNode(item) {
         if (!item) {

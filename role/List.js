@@ -24,7 +24,7 @@ class Role extends ListPage {
             infoProps: {
                 offline: true
             },
-            authorityKey: "sys_role"
+            // authorityKey: "sys_role"
         })
         this.state.roleList = []
         this.state.showData = []

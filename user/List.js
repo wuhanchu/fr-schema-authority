@@ -18,7 +18,7 @@ export class User extends ListPage {
     constructor(props) {
         super(props, {
             schema: schemas.user,
-            authorityKey: "sys_user",
+            // authorityKey: "sys_user",
             infoProps: {
                 offline: true
             },
