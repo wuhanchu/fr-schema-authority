@@ -8,7 +8,7 @@ import schemas from "./schemas"
 
 import frSchema from "@/outter/fr-schema/src"
 const { actions } = frSchema
-
+import config from "@/config"
 /**
  * 注册信息界面
  */
@@ -24,7 +24,8 @@ class License extends PureComponent {
     }
 
     setData = async () => {
-        const res = await services.license.get()
+        const {product_key} = config
+        const res = await services.license.get({ product_key })
         const { machineInfo } = res.data
 
         this.setState({

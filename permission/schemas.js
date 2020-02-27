@@ -1,4 +1,4 @@
-import { frSchema } from "@/outter"
+import frSchema from "@/outter/fr-schema/src"
 
 const { schemaFieldType } = frSchema
 
@@ -79,21 +79,22 @@ export default {
         }
     },
     license: {
-        machineCode: {
+        machine_info: {
             title: "机器码",
             type: schemaFieldType.TextArea,
             readOnly: true,
             props: {
-                minRows: 3
+                minRows: 3,
+                autoSize:true
             }
         },
-        customName: {
+        custom_name: {
             title: "客户名称"
         },
-        registTime: {
+        registered_time: {
             title: "注册时间"
         },
-        dueTime: {
+        due_time: {
             title: "失效时间"
         },
         file: {

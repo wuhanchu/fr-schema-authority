@@ -1,4 +1,4 @@
-import { antdUtils } from "@/outter"
+import antdUtils from "@/outter/fr-schema-antd-utils.src"
 import schemas from "./schemas"
 import services from "./services"
 import { Form } from "antd"
@@ -46,7 +46,7 @@ class List extends ListPage {
                             >
                                 <a
                                     onClick={() =>
-                                        this.handleModalVisible(
+                                        this.handleVisibleModal(
                                             true,
                                             record,
                                             "edit"

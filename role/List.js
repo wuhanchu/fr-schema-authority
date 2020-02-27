@@ -1,7 +1,18 @@
-import { antdUtils, frSchema } from "@/outter"
+import frSchema from "@/outter/fr-schema/src"
+import antdUtils from "@/outter/fr-schema-antd-utils/src"
 import schemas from "./schemas"
 import services from "./services"
-import { Divider, Popconfirm,Modal, Tree, Icon, Card, Input, message, Form } from "antd"
+import {
+    Divider,
+    Popconfirm,
+    Modal,
+    Tree,
+    Icon,
+    Card,
+    Input,
+    message,
+    Form
+} from "antd"
 import { Fragment } from "react"
 import { async } from "q"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
@@ -23,7 +34,7 @@ class Role extends ListPage {
             service: services.roles,
             infoProps: {
                 offline: true
-            },
+            }
             // authorityKey: "sys_role"
         })
         this.state.roleList = []
@@ -55,7 +66,7 @@ class Role extends ListPage {
                 fixed: scroll && "right",
                 render: (text, record) => (
                     <Fragment>
-                        {showEdit && record.name!="superadmin" && (
+                        {showEdit && record.name != "superadmin" && (
                             <Authorized
                                 authority={
                                     this.meta.authority &&
@@ -65,7 +76,7 @@ class Role extends ListPage {
                             >
                                 <a
                                     onClick={() =>
-                                        this.handleModalVisible(
+                                        this.handleVisibleModal(
                                             true,
                                             record,
                                             actions.edit
@@ -108,7 +119,6 @@ class Role extends ListPage {
     }
 
     handleOk = async () => {
-
         try {
             await this.service.putFunctions({
                 role_id: this.state.record.id,
@@ -117,8 +127,6 @@ class Role extends ListPage {
         } catch (error) {
             message.error("权限相同")
         }
-
-
 
         this.refreshList()
         this.setState({ editPermissionVisible: false })
@@ -146,10 +154,10 @@ class Role extends ListPage {
     }
 
     renderOperateColumnExtend(record) {
-        if(record.name=="superadmin"){
+        if (record.name == "superadmin") {
             return null
         }
-        console.log(record.name=="superadmin")
+        console.log(record.name == "superadmin")
         return (
             <Fragment>
                 <Authorized
@@ -166,7 +174,7 @@ class Role extends ListPage {
                     </a>
                 </Authorized>
                 <Authorized authority={"get_role_permissions_sys_role"}>
-                    <Divider type="vertical"/>
+                    <Divider type="vertical" />
                     <a
                         onClick={() => {
                             this.handleSetPermission(record)

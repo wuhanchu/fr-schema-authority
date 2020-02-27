@@ -13,7 +13,7 @@ import frSchema from "@/outter/fr-schema/src/index"
 class LicenseUpload extends PureComponent {
     state = {
         loading: true,
-        machineCode: null,
+        machineInfo: null,
         file: null
     }
 
@@ -22,7 +22,11 @@ class LicenseUpload extends PureComponent {
             const res = await services.license.get()
             this.setState({
                 loading: false,
-                data: { machineCode: res.data.machineInfo }
+                data: {
+                    machineInfo:
+                        res.data.machineInfo ||
+                        (res.data.data && res.data.data.machineInfo)
+                }
             })
         })
     }
@@ -38,8 +42,8 @@ class LicenseUpload extends PureComponent {
     }
 
     getSchema() {
-        const { file, machineCode } = schemas.license
-        return { machineCode, file }
+        const { file, machineInfo } = schemas.license
+        return { machineInfo, file }
     }
 
     render() {

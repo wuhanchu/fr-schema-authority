@@ -1,13 +1,13 @@
 import schemas from "./schemas"
 
-import { frSchema } from "@/outter"
+import frSchema from "@/outter/fr-schema/src"
 
 const { createApi, oauth, utils } = frSchema
 
 const { request } = utils
 
 // 用户
-let users = createApi("users", schemas)
+let users = createApi("flask_user_auth/user", schemas, {}, "eq.")
 
 const convertRole = item => {
     return {
@@ -45,8 +45,10 @@ users.queryCurrent = async () => {
  */
 
 users.queryRoleList = async params => {
-    const { list, ...others } = await createApi(`roles`, schemas).get()
-    // const { list, ...others } = data.data
+    const { list, ...others } = await createApi(
+        `flask_user_auth/user/role`,
+        schemas
+    ).get()
     return {
         list: list.map(item => convertRole(item)),
         ...others
@@ -54,8 +56,7 @@ users.queryRoleList = async params => {
 }
 
 users.editRole = async params => {
-    const res = await createApi(`user_roles`).put(params)
-    // const { list, ...others } = data.data
+    const res = await createApi(`flask_user_auth/user/role`).put(params)
     return res
 }
 

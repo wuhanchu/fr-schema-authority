@@ -9,7 +9,7 @@ export default {
     state: {
         init: null,
         list: [],
-        currentUser: {}
+        currentUser: null
     },
 
     effects: {

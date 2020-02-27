@@ -1,8 +1,10 @@
-import { antdUtils, frSchema } from "@/outter"
+import frSchema from "@/outter/fr-schema/src"
+import antdUtils from "@/outter/fr-schema-antd-utils/src"
+
 import schemas from "./schemas"
 import services from "./services"
 import { Fragment } from "react"
-import { Divider,Popconfirm , Form, message, Select } from "antd"
+import { Divider, Popconfirm, Form, message, Select } from "antd"
 import InfoModal from "@/outter/fr-schema-antd-utils/src/components/Page/InfoModal"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
 
@@ -75,7 +77,7 @@ export class User extends ListPage {
                 fixed: scroll && "right",
                 render: (text, record) => (
                     <Fragment>
-                        {showEdit&& !(record.name=="admin") && (
+                        {showEdit && !(record.name == "admin") && (
                             <Authorized
                                 authority={
                                     this.meta.authority &&
@@ -85,7 +87,7 @@ export class User extends ListPage {
                             >
                                 <a
                                     onClick={() =>
-                                        this.handleModalVisible(
+                                        this.handleVisibleModal(
                                             true,
                                             record,
                                             actions.edit
@@ -106,8 +108,7 @@ export class User extends ListPage {
 
     // 扩展栏拨号按钮
     renderOperateColumnExtend(record) {
-        if(record.name=="admin")
-            return null
+        if (record.name == "admin") return null
         return (
             <Authorized authority={"sys_user_role_put"} noMatch={null}>
                 <Divider type="vertical" />
@@ -127,7 +128,7 @@ export class User extends ListPage {
         const { resource, title, addArgs } = this.meta
         const { editRoleVisible, record } = this.state
         const updateMethods = {
-            handleModalVisible: this.handleRoleModalVisible,
+            handleVisibleModal: this.handleRoleModalVisible,
             handleUpdate: this.handleRoleUpdate
         }
         const { id, name, roles } = this.schema
