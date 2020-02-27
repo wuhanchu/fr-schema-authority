@@ -53,7 +53,7 @@ export default {
                     window.location.replace(redirect)
                 }
 
-                window.location.replace("/")
+                window.location.replace(BASE_PATH )
             }
         },
 

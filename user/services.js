@@ -33,7 +33,7 @@ users.login = params => {
 users.queryCurrent = async () => {
     const response = await request({
         method: "GET",
-        url: "/oauth/current_user"
+        url: BASE_PATH  + "oauth/current_user"
     })
 
     return response
