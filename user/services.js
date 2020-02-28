@@ -2,7 +2,7 @@ import schemas from "./schemas"
 
 import frSchema from "@/outter/fr-schema/src"
 
-const { createApi, oauth, utils } = frSchema
+const { createApi, createBasicApi, oauth, utils } = frSchema
 
 const { request } = utils
 
@@ -31,10 +31,7 @@ users.login = params => {
  * @returns {Promise<void>}
  */
 users.queryCurrent = async () => {
-    const response = await request({
-        method: "GET",
-        url: BASE_PATH  + "oauth/current_user"
-    })
+    const response = await createBasicApi("flask_user_auth/user/current").get()
 
     return response
 }

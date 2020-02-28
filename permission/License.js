@@ -26,11 +26,11 @@ class License extends PureComponent {
     setData = async () => {
         const {product_key} = config
         const res = await services.license.get({ product_key })
-        const { machineInfo } = res.data
+        const { machine_info } = res.data
 
         this.setState({
             loading: false,
-            data: { machineCode: machineInfo, ...res.data }
+            data: { machineCode: machine_info, ...res.data }
         })
     }
 
