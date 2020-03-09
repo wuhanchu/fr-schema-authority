@@ -45,7 +45,7 @@ users.queryRoleList = async params => {
     const { list, ...others } = await createApi(
         `flask_user_auth/user/role`,
         schemas
-    ).get()
+    ).get(params)
     return {
         list: list.map(item => convertRole(item)),
         ...others
@@ -53,7 +53,7 @@ users.queryRoleList = async params => {
 }
 
 users.editRole = async params => {
-    const res = await createApi(`flask_user_auth/user/role`).put(params)
+    const res = await createApi(`flask_user_auth/user/role`).patch(params)
     return res
 }
 

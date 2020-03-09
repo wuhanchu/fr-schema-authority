@@ -1,11 +1,8 @@
 import schemas from "./schemas"
 
 import frSchema from "@/outter/fr-schema/src"
-import { async } from "q"
 
-const { createApi, oauth, utils } = frSchema
-
-const { request } = utils
+const { createApi } = frSchema
 
 // 用户
 let roles = createApi("flask_user_auth/role", schemas)
@@ -16,7 +13,7 @@ const convertRole = item => {
     }
 }
 roles.queryPermissionList = async params => {
-    const res = await createApi(
+    return await createApi(
         `flask_user_auth/role/permission`,
         schemas
     ).getBasic({
@@ -24,34 +21,24 @@ roles.queryPermissionList = async params => {
         offset: 0,
         sort: "-id"
     })
-    // const { list, ...others } = data.data
-    return {
-        list: res.data.list
-        // ...others
-    }
 }
 
 roles.editPermission = async params => {
-    const res = await createApi(`flask_user_auth/role/permission`).put(params)
-    // const { list, ...others } = data.data
-    return res
+    return await createApi(`flask_user_auth/role/permission`).patch(params)
 }
 
 roles.getPermission = async params => {
-    const res = await createApi(`flask_user_auth/role/permission`).getBasic()
-    return res
+    return await createApi(`flask_user_auth/role/permission`).get()
 }
 
 roles.putFunctions = async args => {
-    return createApi("flask_user_auth/role/permission_scope").put(others)
+    return createApi("flask_user_auth/role/permission_scope").put(args)
 }
 
 roles.getFunctions = async args => {
-    const { data: list } = await createApi(
-        "flask_user_auth/user/role/permission_scope"
-    ).getBasic(others)
-
-    return { list }
+    return await createApi("flask_user_auth/role/permission_scope").get(
+        args
+    )
 }
 
 export default {

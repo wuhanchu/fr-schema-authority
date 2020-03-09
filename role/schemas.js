@@ -1,4 +1,4 @@
-import frSchema  from "@/outter/fr-schema/src"
+import frSchema from "@/outter/fr-schema/src"
 
 const { schemaFieldType } = frSchema
 

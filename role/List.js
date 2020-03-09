@@ -2,19 +2,8 @@ import frSchema from "@/outter/fr-schema/src"
 import antdUtils from "@/outter/fr-schema-antd-utils/src"
 import schemas from "./schemas"
 import services from "./services"
-import {
-    Divider,
-    Popconfirm,
-    Modal,
-    Tree,
-    Icon,
-    Card,
-    Input,
-    message,
-    Form
-} from "antd"
+import { Divider, Form, message, Modal, Tree } from "antd"
 import { Fragment } from "react"
-import { async } from "q"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
 import FunctionTree from "../permission/components/FunctionTree"
 
@@ -121,8 +110,8 @@ class Role extends ListPage {
     handleOk = async () => {
         try {
             await this.service.putFunctions({
-                role_id: this.state.record.id,
-                role_permission_group_ids: this.state.functionIdList
+                id: this.state.record.id,
+                role_permission_scope_keys: this.state.permissionScopeKeyList
             })
         } catch (error) {
             message.error("权限相同")
@@ -143,8 +132,8 @@ class Role extends ListPage {
     handleSetPermission = async record => {
         let permissionList = await this.service.getPermission(record.id)
         let permissionDict = []
-        for (let i = 0; i < permissionList.data.length; i++) {
-            permissionDict.push(permissionList.data[i].id.toString())
+        for (let i = 0; i < permissionList.list.length; i++) {
+            permissionDict.push(permissionList.list[i].id.toString())
         }
         this.setState({
             editPermissionVisible: true,
@@ -164,7 +153,7 @@ class Role extends ListPage {
                     authority={"sys_role_permission_put"}
                     noMatch={null}
                 >
-                    <Divider type="vertical" />
+                    <Divider type="vertical"/>
                     <a
                         onClick={() => {
                             this.handleSetPermission(record)
@@ -174,7 +163,7 @@ class Role extends ListPage {
                     </a>
                 </Authorized>
                 <Authorized authority={"get_role_permissions_sys_role"}>
-                    <Divider type="vertical" />
+                    <Divider type="vertical"/>
                     <a
                         onClick={() => {
                             this.handleSetPermission(record)
@@ -213,9 +202,9 @@ class Role extends ListPage {
                     }}
                 >
                     <FunctionTree
-                        onChange={functionIdList => {
+                        onChange={permissionScopeKeyList => {
                             this.setState({
-                                functionIdList
+                                permissionScopeKeyList
                             })
                         }}
                         record={this.state.record}

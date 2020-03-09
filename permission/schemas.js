@@ -69,7 +69,7 @@ export default {
         // }
     },
     function: {
-        group_name: {
+        name: {
             title: "名称",
             required: true
         },
@@ -85,7 +85,7 @@ export default {
             readOnly: true,
             props: {
                 minRows: 3,
-                autoSize:true
+                autoSize: true
             }
         },
         custom_name: {

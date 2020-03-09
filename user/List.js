@@ -4,9 +4,11 @@ import antdUtils from "@/outter/fr-schema-antd-utils/src"
 import schemas from "./schemas"
 import services from "./services"
 import { Fragment } from "react"
-import { Divider, Popconfirm, Form, message, Select } from "antd"
+import { Divider, Form, message, Select } from "antd"
 import InfoModal from "@/outter/fr-schema-antd-utils/src/components/Page/InfoModal"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
+import roleServices from "../role/services"
+import clone from "clone"
 
 const { utils, actions } = frSchema
 
@@ -19,7 +21,7 @@ const { ListPage } = antdUtils.components
 export class User extends ListPage {
     constructor(props) {
         super(props, {
-            schema: schemas.user,
+            schema: clone(schemas.user),
             // authorityKey: "sys_user",
             infoProps: {
                 offline: true
@@ -28,9 +30,9 @@ export class User extends ListPage {
         })
     }
 
-    componentDidMount() {
-        super.componentDidMount()
+    componentDidMount = () => {
         this.handleGetRoleList()
+        super.componentDidMount()
     }
 
     handleRoleModalVisible = (flag, record, action) => {
@@ -55,13 +57,14 @@ export class User extends ListPage {
     }
 
     handleGetRoleList = async () => {
-        const roleList = await this.service.queryRoleList()
+        const roleList = await roleServices.roles.get()
         let data = utils.dict.listToDict(
             roleList.list,
             null,
-            "name",
+            "id",
             "chinese_name"
         )
+        this.schema.roles.dict = data
         this.setState({
             roleList: data
         })

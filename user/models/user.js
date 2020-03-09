@@ -28,10 +28,10 @@ export default {
                     throw response
                 }
 
-                const user = response.data
+                const user = response
                 yield put({
                     type: "saveCurrentUser",
-                    payload: response.data
+                    payload: response
                 })
 
                 // 权限拼接
@@ -56,8 +56,8 @@ export default {
                     })
 
                 // The iteration of function
-                user.permission_groups &&
-                    user.permission_groups.forEach(item => {
+                user.permission_scopes &&
+                    user.permission_scopes.forEach(item => {
                         item.key && permissions.push(item.key)
                     })
 

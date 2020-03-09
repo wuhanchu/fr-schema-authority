@@ -30,7 +30,9 @@ export default {
             infoHide: true,
             editHide: true,
             type: schemaFieldType.MultiSelect,
-            dictFunc: dict => dict.roleExtend
+            dictFunc: dict => {
+                return dict.role
+            }
         },
         telephone: {
             title: "电话"

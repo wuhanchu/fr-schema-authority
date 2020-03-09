@@ -24,8 +24,7 @@ class LicenseUpload extends PureComponent {
                 loading: false,
                 data: {
                     machine_info:
-                        res.data.machine_info ||
-                        (res.data.data && res.data.data.machine_info)
+                        res.machine_info || (res.data && res.data.machine_info)
                 }
             })
         })

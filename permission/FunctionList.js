@@ -18,7 +18,7 @@ class FunctionList extends ListPage {
             schema: schemas.function,
             service: services.functions,
             authorityKey: "sys_function"
-        }) 
+        })
     }
 
     renderOperationButtons() {
@@ -31,8 +31,8 @@ class FunctionList extends ListPage {
 
     // 搜索
     renderSearchBar() {
-        const { group_name } = this.schema
-        const filters = this.createFilters({ group_name }, 5)
+        const { name } = this.schema
+        const filters = this.createFilters({ name }, 5)
         return this.createSearchBar(filters)
     }
 }
