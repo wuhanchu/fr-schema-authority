@@ -13,14 +13,13 @@ const convertRole = item => {
     }
 }
 roles.queryPermissionList = async params => {
-    return await createApi(
-        `flask_user_auth/role/permission`,
-        schemas
-    ).getBasic({
-        limit: 100,
-        offset: 0,
-        sort: "-id"
-    })
+    return await createApi(`flask_user_auth/role/permission`, schemas).getBasic(
+        {
+            limit: 100,
+            offset: 0,
+            sort: "-id"
+        }
+    )
 }
 
 roles.editPermission = async params => {
@@ -36,9 +35,7 @@ roles.putFunctions = async args => {
 }
 
 roles.getFunctions = async args => {
-    return await createApi("flask_user_auth/role/permission_scope").get(
-        args
-    )
+    return await createApi("flask_user_auth/role/permission_scope").get(args)
 }
 
 export default {

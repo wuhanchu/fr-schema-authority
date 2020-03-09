@@ -153,7 +153,7 @@ class Role extends ListPage {
                     authority={"sys_role_permission_put"}
                     noMatch={null}
                 >
-                    <Divider type="vertical"/>
+                    <Divider type="vertical" />
                     <a
                         onClick={() => {
                             this.handleSetPermission(record)
@@ -163,7 +163,7 @@ class Role extends ListPage {
                     </a>
                 </Authorized>
                 <Authorized authority={"get_role_permissions_sys_role"}>
-                    <Divider type="vertical"/>
+                    <Divider type="vertical" />
                     <a
                         onClick={() => {
                             this.handleSetPermission(record)

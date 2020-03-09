@@ -55,8 +55,6 @@ export class FunctionTree extends PureComponent {
             checkedKeys
         })
         this.props.onChange && this.props.onChange(checkedKeys)
-
-
     }
 
     componentDidMount() {
@@ -105,9 +103,9 @@ export class FunctionTree extends PureComponent {
                 title={item.name}
             >
                 {item.children &&
-                item.children.map(childItem => {
-                    return this.renderNode(childItem)
-                })}
+                    item.children.map(childItem => {
+                        return this.renderNode(childItem)
+                    })}
             </Tree.TreeNode>
         )
     }
@@ -115,16 +113,16 @@ export class FunctionTree extends PureComponent {
     checkValue(data, value) {
         let result = false
         data &&
-        data.forEach((item, index) => {
-            if (
-                this.checkValue(item.children, value) ||
-                item.name.indexOf(value) > -1
-            ) {
-                result = true
-                return
-            }
-            item.hide = true
-        })
+            data.forEach((item, index) => {
+                if (
+                    this.checkValue(item.children, value) ||
+                    item.name.indexOf(value) > -1
+                ) {
+                    result = true
+                    return
+                }
+                item.hide = true
+            })
         return result
     }
 
@@ -216,10 +214,10 @@ export class FunctionTree extends PureComponent {
 
         let nodeList = []
         data &&
-        data.forEach(item => {
-            const node = this.renderNode(item)
-            node && nodeList.push(node)
-        })
+            data.forEach(item => {
+                const node = this.renderNode(item)
+                node && nodeList.push(node)
+            })
 
         return (
             <Fragment>
@@ -331,7 +329,7 @@ export class FunctionTree extends PureComponent {
                                     }
 
                                     this.props.onChange &&
-                                    this.props.onChange(checkIds)
+                                        this.props.onChange(checkIds)
                                 }}
                                 checkedKeys={this.state.checkedKeys}
                             >
