@@ -2,7 +2,7 @@ import frSchema from "@/outter/fr-schema/src"
 import antdUtils from "@/outter/fr-schema-antd-utils/src"
 import schemas from "./schemas"
 import services from "./services"
-import { Divider, Form, message, Modal, Tree } from "antd"
+import { Divider, Form, message, Modal, Popconfirm, Tree } from "antd"
 import { Fragment } from "react"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
 import FunctionTree from "../permission/components/FunctionTree"
@@ -23,8 +23,8 @@ class Role extends ListPage {
             service: services.roles,
             infoProps: {
                 offline: true
-            }
-            // authorityKey: "sys_role"
+            },
+            authorityKey: "role"
         })
         this.state.roleList = []
         this.state.showData = []
@@ -76,7 +76,7 @@ class Role extends ListPage {
                                 </a>
                             </Authorized>
                         )}
-                        {/* {showDelete && (
+                        {showDelete && (
                             <Authorized
                                 authority={
                                     this.meta.authority &&
@@ -84,10 +84,10 @@ class Role extends ListPage {
                                 }
                                 noMatch={null}
                             >
-                                <Divider type="vertical" />
+                                <Divider type="vertical"/>
                                 <Popconfirm
                                     title="是否要删除此行？"
-                                    onConfirm={ async e => {
+                                    onConfirm={async e => {
                                         await this.service.putFunctions({
                                             role_id: this.state.record.id,
                                             role_permission_group_ids: []
@@ -99,7 +99,7 @@ class Role extends ListPage {
                                     <a>删除</a>
                                 </Popconfirm>
                             </Authorized>
-                        )} */}
+                        )}
                         {this.renderOperateColumnExtend(record)}
                     </Fragment>
                 )
@@ -111,7 +111,7 @@ class Role extends ListPage {
         try {
             await this.service.putFunctions({
                 id: this.state.record.id,
-                role_permission_scope_keys: this.state.permissionScopeKeyList
+                role_permission_scope: this.state.permissionScopeList
             })
         } catch (error) {
             message.error("权限相同")
@@ -150,10 +150,10 @@ class Role extends ListPage {
         return (
             <Fragment>
                 <Authorized
-                    authority={"sys_role_permission_put"}
+                    authority={"role_permission_put"}
                     noMatch={null}
                 >
-                    <Divider type="vertical" />
+                    <Divider type="vertical"/>
                     <a
                         onClick={() => {
                             this.handleSetPermission(record)
@@ -162,8 +162,8 @@ class Role extends ListPage {
                         权限分配
                     </a>
                 </Authorized>
-                <Authorized authority={"get_role_permissions_sys_role"}>
-                    <Divider type="vertical" />
+                <Authorized authority={"role_permission_scope_put"}>
+                    <Divider type="vertical"/>
                     <a
                         onClick={() => {
                             this.handleSetPermission(record)
@@ -202,9 +202,9 @@ class Role extends ListPage {
                     }}
                 >
                     <FunctionTree
-                        onChange={permissionScopeKeyList => {
+                        onChange={permissionScopeList => {
                             this.setState({
-                                permissionScopeKeyList
+                                permissionScopeList
                             })
                         }}
                         record={this.state.record}

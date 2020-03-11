@@ -53,16 +53,8 @@ users.queryRoleList = async params => {
 }
 
 users.editRole = async params => {
-    const res = await createApi(`flask_user_auth/user/role`).patch(params)
+    const res = await createApi(`flask_user_auth/user/role`).put(params)
     return res
 }
 
-// users.queryRoleList = async (userID) => {
-//     const response = await request({
-//         method: "GET",
-//         url: `user_roles/${userID}`
-//     })
-
-//     return response
-// }
 export default { users }

@@ -22,7 +22,7 @@ export class User extends ListPage {
     constructor(props) {
         super(props, {
             schema: clone(schemas.user),
-            // authorityKey: "sys_user",
+            authorityKey: "user",
             infoProps: {
                 offline: true
             },
@@ -113,7 +113,7 @@ export class User extends ListPage {
     renderOperateColumnExtend(record) {
         if (record.name == "admin") return null
         return (
-            <Authorized authority={"sys_user_role_put"} noMatch={null}>
+            <Authorized authority={"user_role_put"} noMatch={null}>
                 <Divider type="vertical" />
                 <a
                     onClick={() => {

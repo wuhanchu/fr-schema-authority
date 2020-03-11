@@ -3,9 +3,6 @@ import schemas from "./schemas"
 import services from "./services"
 import { Form } from "antd"
 
-import { Fragment } from "react"
-import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
-
 const { ListPage } = antdUtils.components
 
 /**
@@ -17,7 +14,7 @@ class FunctionList extends ListPage {
         super(props, {
             schema: schemas.function,
             service: services.functions,
-            authorityKey: "sys_function"
+            authorityKey: "permission_scope"
         })
     }
 

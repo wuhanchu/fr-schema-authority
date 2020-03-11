@@ -9,7 +9,7 @@ const { request } = utils
 
 // user function
 let permissions = createApi("flask_user_auth/permission", schemas.permission)
-let functions = createApi("flask_user_auth/permission/scope", schemas.function)
+let functions = createApi("flask_user_auth/permission_scope", schemas.function)
 
 // 证书
 const license = {}
