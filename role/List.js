@@ -48,61 +48,63 @@ class Role extends ListPage {
     renderOperateColumn(props = {}) {
         const { scroll } = this.meta
         const { showEdit = true, showDelete = true } = props
+
         return (
             !this.meta.readOnly &&
             !this.props.readOnly && {
                 title: "操作",
                 fixed: scroll && "right",
-                render: (text, record) => (
-                    <Fragment>
-                        {showEdit && record.name != "superadmin" && (
-                            <Authorized
-                                authority={
-                                    this.meta.authority &&
-                                    this.meta.authority.update
-                                }
-                                noMatch={null}
-                            >
-                                <a
-                                    onClick={() =>
-                                        this.handleVisibleModal(
-                                            true,
-                                            record,
-                                            actions.edit
-                                        )
+                render: (text, record) =>
+                    record.name != "superadmin" && (
+                        <Fragment>
+                            {showEdit && record.name != "superadmin" && (
+                                <Authorized
+                                    authority={
+                                        this.meta.authority &&
+                                        this.meta.authority.update
                                     }
+                                    noMatch={null}
                                 >
-                                    修改
-                                </a>
-                            </Authorized>
-                        )}
-                        {showDelete && (
-                            <Authorized
-                                authority={
-                                    this.meta.authority &&
-                                    this.meta.authority.delete
-                                }
-                                noMatch={null}
-                            >
-                                <Divider type="vertical"/>
-                                <Popconfirm
-                                    title="是否要删除此行？"
-                                    onConfirm={async e => {
-                                        await this.service.putFunctions({
-                                            role_id: this.state.record.id,
-                                            role_permission_group_ids: []
-                                        })
-                                        this.handleDelete(record)
-                                        e.stopPropagation()
-                                    }}
+                                    <a
+                                        onClick={() =>
+                                            this.handleVisibleModal(
+                                                true,
+                                                record,
+                                                actions.edit
+                                            )
+                                        }
+                                    >
+                                        修改
+                                    </a>
+                                </Authorized>
+                            )}
+                            {showDelete && (
+                                <Authorized
+                                    authority={
+                                        this.meta.authority &&
+                                        this.meta.authority.delete
+                                    }
+                                    noMatch={null}
                                 >
-                                    <a>删除</a>
-                                </Popconfirm>
-                            </Authorized>
-                        )}
-                        {this.renderOperateColumnExtend(record)}
-                    </Fragment>
-                )
+                                    <Divider type="vertical" />
+                                    <Popconfirm
+                                        title="是否要删除此行？"
+                                        onConfirm={async e => {
+                                            await this.service.putFunctions({
+                                                role_id: this.state.record.id,
+                                                role_permission_group_ids: []
+                                            })
+                                            this.handleDelete(record)
+                                            e.stopPropagation()
+                                        }}
+                                    >
+                                        <a>删除</a>
+                                    </Popconfirm>
+                                </Authorized>
+                            )}
+                            {this.renderOperateColumnExtend(record)}
+                        </Fragment>
+                    )
             }
         )
     }
@@ -149,11 +151,8 @@ class Role extends ListPage {
         console.log(record.name == "superadmin")
         return (
             <Fragment>
-                <Authorized
-                    authority={"role_permission_put"}
-                    noMatch={null}
-                >
-                    <Divider type="vertical"/>
+                <Authorized authority={"role_permission_put"} noMatch={null}>
+                    <Divider type="vertical" />
                     <a
                         onClick={() => {
                             this.handleSetPermission(record)
@@ -163,7 +162,7 @@ class Role extends ListPage {
                     </a>
                 </Authorized>
                 <Authorized authority={"role_permission_scope_put"}>
-                    <Divider type="vertical"/>
+                    <Divider type="vertical" />
                     <a
                         onClick={() => {
                             this.handleSetPermission(record)
