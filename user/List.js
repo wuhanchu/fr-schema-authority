@@ -35,7 +35,7 @@ export class User extends ListPage {
         super.componentDidMount()
     }
 
-    handleRoleModalVisible = (flag, record, action) => {
+    handleRoleBisibleModal = (flag, record, action) => {
         this.setState({
             editRoleVisible: !!flag,
             infoData: record,
@@ -53,7 +53,7 @@ export class User extends ListPage {
         // 更新
         this.refreshList()
         message.success("修改成功")
-        this.handleRoleModalVisible()
+        this.handleRoleBisibleModal()
     }
 
     handleGetRoleList = async () => {
@@ -131,7 +131,7 @@ export class User extends ListPage {
         const { resource, title, addArgs } = this.meta
         const { editRoleVisible, record } = this.state
         const updateMethods = {
-            handleVisibleModal: this.handleRoleModalVisible,
+            handleVisibleModal: this.handleRoleBisibleModal,
             handleUpdate: this.handleRoleUpdate
         }
         const { id, name, roles } = this.schema

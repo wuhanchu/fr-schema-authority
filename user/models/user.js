@@ -41,20 +41,6 @@ export default {
                         permissions.push(item.name)
                     })
 
-                // todo net version need to delete
-                user.permissions &&
-                    user.permissions.forEach(item => {
-                        item.key && permissions.push(item.key)
-
-                        item.key &&
-                            item.key.split("_").forEach((_, index) => {
-                                permissions.push(
-                                    item.key.split("_", index + 1).join("_")
-                                )
-                            })
-                        permissions.push(item.role_name)
-                    })
-
                 // The iteration of function
                 user.permission_scopes &&
                     user.permission_scopes.forEach(item => {
