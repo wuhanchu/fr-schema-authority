@@ -10,7 +10,6 @@ import smartArrayToTree from "smart-arraytotree"
 
 export class FunctionTree extends PureComponent {
     functitonMap = {} // store key -> function item
-    functitonMapByKey = {} // store key -> function item
 
     static defaultProps = {
         showStatistics: true,
@@ -27,31 +26,36 @@ export class FunctionTree extends PureComponent {
     async init() {
         let { record: roleRecord } = this.props
 
-        // stor
         this.functitonMap = {}
-        this.functitonMapByKey = {}
 
         let functionList = (await services.functions.get({
             pageSize: 9999,
             order: "parent_key.desc"
         })).list
 
-        console.debug("functionList", functionList)
-
         functionList = functionList.map(item => {
-            this.functitonMap[item.key] = item
-            this.functitonMapByKey[item.key] = item
+            const result = {
+                ...item,
+                treeKey: item.product_key + "_" + item.key,
+                treeParentKey:
+                    item.parent_key &&
+                    (item.parent_key == "login"
+                        ? "user_auth"
+                        : item.product_key) +
+                        "_" +
+                        item.parent_key
+            }
 
-            return item
+            this.functitonMap[result.treeKey] = result
+            return result
         })
 
         const checkedKeys = (await roleServices.roles.getFunctions({
             role_id: roleRecord.id,
             pageSize: 9999
-        })).list.map(item => this.functitonMapByKey[item.key].key)
+        })).list.map(item => item.product_key + "_" + item.key)
 
         this.data = this.convertToTree(functionList)
-        console.debug("treeData", this.data)
 
         this.setState({
             data: this.data,
@@ -65,13 +69,9 @@ export class FunctionTree extends PureComponent {
     }
 
     convertToTree(data) {
-        const tempData = smartArrayToTree(data.map(item => ({
-            ...item,
-            treeKey: !item.key || item.key == "login"? item.key : item.product_key + "_" + item.key,
-            treeParentKey: !item.parent_key || item.parent_key == "login" && item.parent_key == "login"? item.parent_key : item.product_key + "_" + item.parent_key,
-        })), {
-            id: 'treeKey',
-            pid: 'treeParentKey',
+        const tempData = smartArrayToTree(data, {
+            id: "treeKey",
+            pid: "treeParentKey",
             firstPid: null
         })
 
@@ -85,29 +85,24 @@ export class FunctionTree extends PureComponent {
 
         return (
             <Tree.TreeNode
-                key={item.key}
-                value={item.key}
+                key={item.treeKey}
+                value={item.treeKey}
                 item={item}
                 checkable={true}
-                // nodeName={item.nodeName}
                 disableCheckbox={
-                    item.parent_key &&
+                    item.treeParentKey &&
                     this.state.checkedKeys &&
-                    !this.state.checkedKeys.includes(item.parent_key)
+                    !this.state.checkedKeys.includes(item.treeParentKey)
                 }
                 style={{
-                    display: item.hide? "none" : ""
+                    display: item.hide ? "none" : ""
                 }}
-                // icon={({ selected }) =>
-                //     item.nodeIcon ? <IconFont type={item.nodeIcon} /> : null
-                // }
-                // selectable={true}
                 title={item.name}
             >
                 {item.children &&
-                item.children.map(childItem => {
-                    return this.renderNode(childItem)
-                })}
+                    item.children.map(childItem => {
+                        return this.renderNode(childItem)
+                    })}
             </Tree.TreeNode>
         )
     }
@@ -115,16 +110,16 @@ export class FunctionTree extends PureComponent {
     checkValue(data, value) {
         let result = false
         data &&
-        data.forEach((item, index) => {
-            if (
-                this.checkValue(item.children, value) ||
-                item.name.indexOf(value) > -1
-            ) {
-                result = true
-                return
-            }
-            item.hide = true
-        })
+            data.forEach((item, index) => {
+                if (
+                    this.checkValue(item.children, value) ||
+                    item.name.indexOf(value) > -1
+                ) {
+                    result = true
+                    return
+                }
+                item.hide = true
+            })
         return result
     }
 
@@ -132,7 +127,7 @@ export class FunctionTree extends PureComponent {
     traverseNode(node) {
         let data = this.state.datas
 
-        data.push(node.key)
+        data.push(node.treeKey)
         this.setState({
             datas: data
         })
@@ -141,8 +136,8 @@ export class FunctionTree extends PureComponent {
     deleteNodeData(node, type) {
         let checkedKeys = this.state.checkedKeys
         // let checkedKeysCopy = [...this.state.checkedKeys]
-        if (checkedKeys.indexOf(node.key) != -1) {
-            checkedKeys.splice(checkedKeys.indexOf(node.key), 1)
+        if (checkedKeys.indexOf(node.treeKey) != -1) {
+            checkedKeys.splice(checkedKeys.indexOf(node.treeKey), 1)
         }
         this.setState({
             checkedKeys: checkedKeys
@@ -152,8 +147,8 @@ export class FunctionTree extends PureComponent {
     addNodeData(node, type) {
         let checkedKeys = this.state.checkedKeys
         // let checkedKeysCopy = [...this.state.checkedKeys]
-        if (checkedKeys.indexOf(node.key) == -1) {
-            checkedKeys.push(node.key)
+        if (checkedKeys.indexOf(node.treeKey) == -1) {
+            checkedKeys.push(node.treeKey)
         }
         this.setState({
             checkedKeys: checkedKeys
@@ -184,9 +179,10 @@ export class FunctionTree extends PureComponent {
             return
         }
 
-        if (node.key == key) {
+        if (node.treeKey == key) {
             this.deleteTreeData(node, type)
         }
+
         this.traverseNode(node)
         if (node.children && node.children.length > 0) {
             var i = 0
@@ -218,10 +214,10 @@ export class FunctionTree extends PureComponent {
 
         let nodeList = []
         data &&
-        data.forEach(item => {
-            const node = this.renderNode(item)
-            node && nodeList.push(node)
-        })
+            data.forEach(item => {
+                const node = this.renderNode(item)
+                node && nodeList.push(node)
+            })
 
         return (
             <Fragment>
@@ -255,7 +251,7 @@ export class FunctionTree extends PureComponent {
                 </Row>
                 <Divider style={{ marginBottom: 4, marginTop: 12 }}></Divider>
                 <Row>
-                    {data? (
+                    {data ? (
                         <div
                             style={{
                                 overflowY: "scroll",
@@ -280,7 +276,6 @@ export class FunctionTree extends PureComponent {
                                     if (
                                         checkedKeys.length <
                                         this.state.checkedKeys.length
-                                        // this.state.checkStrictly
                                     ) {
                                         this.traverseTree(
                                             this.data[0],
@@ -292,10 +287,8 @@ export class FunctionTree extends PureComponent {
                                         this.state.checkedKeys.length
                                     ) {
                                         if (this.state.checkStrictly) {
-
                                             notStrictly = checkedKeys
                                         } else {
-
                                             this.traverseTree(
                                                 this.data[0],
                                                 key,
@@ -307,19 +300,21 @@ export class FunctionTree extends PureComponent {
                                     this.setState({
                                         datas: []
                                     })
-                                    let checkIds
+
+                                    // onchange item data
+                                    let checkData
                                     if (notStrictly) {
-                                        checkIds = notStrictly.map(
+                                        checkData = notStrictly.map(
                                             key => this.functitonMap[key]
                                         )
                                     } else {
-                                        checkIds = this.state.checkedKeys.map(
+                                        checkData = this.state.checkedKeys.map(
                                             key => this.functitonMap[key]
                                         )
                                     }
 
                                     this.props.onChange &&
-                                    this.props.onChange(checkIds)
+                                        this.props.onChange(checkData)
                                 }}
                                 checkedKeys={this.state.checkedKeys}
                             >
@@ -327,7 +322,7 @@ export class FunctionTree extends PureComponent {
                             </Tree>
                         </div>
                     ) : (
-                        <Skeleton active/>
+                        <Skeleton active />
                     )}
                 </Row>
             </Fragment>
