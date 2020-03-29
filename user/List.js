@@ -4,7 +4,7 @@ import antdUtils from "@/outter/fr-schema-antd-utils/src"
 import schemas from "./schemas"
 import services from "./services"
 import { Fragment } from "react"
-import { Divider, Form, message, Select } from "antd"
+import { Divider, Form, message, Popconfirm, Select } from "antd"
 import InfoModal from "@/outter/fr-schema-antd-utils/src/components/Page/InfoModal"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
 import roleServices from "../role/services"
@@ -79,31 +79,52 @@ export class User extends ListPage {
                 title: "操作",
                 fixed: scroll && "right",
                 render: (text, record) => (
-                    <Fragment>
-                        {showEdit && !(record.name == "admin") && (
-                            <Authorized
-                                authority={
-                                    this.meta.authority &&
-                                    this.meta.authority.update
-                                }
-                                noMatch={null}
-                            >
-                                <a
-                                    onClick={() =>
-                                        this.handleVisibleModal(
-                                            true,
-                                            record,
-                                            actions.edit
-                                        )
+                    record.name != "admin" &&
+                        <Fragment>
+                            {showEdit && (
+                                <Authorized
+                                    authority={
+                                        this.meta.authority &&
+                                        this.meta.authority.update
                                     }
+                                    noMatch={null}
                                 >
-                                    修改
-                                </a>
-                            </Authorized>
-                        )}
+                                    <a
+                                        onClick={() =>
+                                            this.handleVisibleModal(
+                                                true,
+                                                record,
+                                                actions.edit
+                                            )
+                                        }
+                                    >
+                                        修改
+                                    </a>
+                                </Authorized>
+                            )}
+                            {showDelete && (
+                                <Authorized
+                                    authority={
+                                        this.meta.authority &&
+                                        this.meta.authority.delete
+                                    }
+                                    noMatch={null}
+                                >
+                                    <Divider type="vertical"/>
+                                    <Popconfirm
+                                        title="删除用户会影响相关数据的显示，确认删除？"
+                                        onConfirm={e => {
+                                            this.handleDelete(record)
+                                            e.stopPropagation()
+                                        }}
+                                    >
+                                        <a>删除</a>
+                                    </Popconfirm>
+                                </Authorized>
+                            )}
 
-                        {this.renderOperateColumnExtend(record)}
-                    </Fragment>
+                            {this.renderOperateColumnExtend(record)}
+                        </Fragment>
                 )
             }
         )
@@ -114,7 +135,7 @@ export class User extends ListPage {
         if (record.name == "admin") return null
         return (
             <Authorized authority={"user_role_put"} noMatch={null}>
-                <Divider type="vertical" />
+                <Divider type="vertical"/>
                 <a
                     onClick={() => {
                         this.setState({ editRoleVisible: true, record: record })
