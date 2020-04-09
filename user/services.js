@@ -7,7 +7,7 @@ const { createApi, createBasicApi, oauth, utils } = frSchema
 const { request } = utils
 
 // 用户
-let users = createApi("flask_user_auth/user", schemas, {}, "eq.")
+let users = createApi("user_auth/user", schemas, {}, "eq.")
 
 const convertRole = item => {
     return {
@@ -31,7 +31,7 @@ users.login = params => {
  * @returns {Promise<void>}
  */
 users.queryCurrent = async () => {
-    const response = await createBasicApi("flask_user_auth/user/current").get()
+    const response = await createBasicApi("user_auth/user/current").get()
 
     return response
 }
@@ -43,7 +43,7 @@ users.queryCurrent = async () => {
 
 users.queryRoleList = async params => {
     const { list, ...others } = await createApi(
-        `flask_user_auth/user/role`,
+        `user_auth/user/role`,
         schemas
     ).get(params)
     return {
@@ -53,7 +53,7 @@ users.queryRoleList = async params => {
 }
 
 users.editRole = async params => {
-    const res = await createApi(`flask_user_auth/user/role`).put(params)
+    const res = await createApi(`user_auth/user/role`).put(params)
     return res
 }
 
