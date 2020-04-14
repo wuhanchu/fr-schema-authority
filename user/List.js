@@ -10,6 +10,8 @@ import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/
 import roleServices from "../role/services"
 import clone from "clone"
 
+import departmentService from "../department/service"
+
 const { utils, actions } = frSchema
 
 const { Option } = Select
@@ -32,6 +34,7 @@ export class User extends ListPage {
 
     componentDidMount = () => {
         this.handleGetRoleList()
+        this.handleGetDepartmentList()
         super.componentDidMount()
     }
 
@@ -54,6 +57,18 @@ export class User extends ListPage {
         this.refreshList()
         message.success("修改成功")
         this.handleRoleVisibleModal()
+    }
+
+    handleGetDepartmentList = async () => {
+        const response = await departmentService.get()
+        let data = utils.dict.listToDict(
+            response.list,
+            null,
+            "key",
+            "name"
+        )
+
+        this.schema.department_key.dict = data
     }
 
     handleGetRoleList = async () => {
@@ -80,51 +95,51 @@ export class User extends ListPage {
                 fixed: scroll && "right",
                 render: (text, record) => (
                     record.name != "admin" &&
-                        <Fragment>
-                            {showEdit && (
-                                <Authorized
-                                    authority={
-                                        this.meta.authority &&
-                                        this.meta.authority.update
+                    <Fragment>
+                        {showEdit && (
+                            <Authorized
+                                authority={
+                                    this.meta.authority &&
+                                    this.meta.authority.update
+                                }
+                                noMatch={null}
+                            >
+                                <a
+                                    onClick={() =>
+                                        this.handleVisibleModal(
+                                            true,
+                                            record,
+                                            actions.edit
+                                        )
                                     }
-                                    noMatch={null}
                                 >
-                                    <a
-                                        onClick={() =>
-                                            this.handleVisibleModal(
-                                                true,
-                                                record,
-                                                actions.edit
-                                            )
-                                        }
-                                    >
-                                        修改
-                                    </a>
-                                </Authorized>
-                            )}
-                            {showDelete && (
-                                <Authorized
-                                    authority={
-                                        this.meta.authority &&
-                                        this.meta.authority.delete
-                                    }
-                                    noMatch={null}
+                                    修改
+                                </a>
+                            </Authorized>
+                        )}
+                        {showDelete && (
+                            <Authorized
+                                authority={
+                                    this.meta.authority &&
+                                    this.meta.authority.delete
+                                }
+                                noMatch={null}
+                            >
+                                <Divider type="vertical"/>
+                                <Popconfirm
+                                    title="删除用户会影响相关数据的显示，确认删除？"
+                                    onConfirm={e => {
+                                        this.handleDelete(record)
+                                        e.stopPropagation()
+                                    }}
                                 >
-                                    <Divider type="vertical"/>
-                                    <Popconfirm
-                                        title="删除用户会影响相关数据的显示，确认删除？"
-                                        onConfirm={e => {
-                                            this.handleDelete(record)
-                                            e.stopPropagation()
-                                        }}
-                                    >
-                                        <a>删除</a>
-                                    </Popconfirm>
-                                </Authorized>
-                            )}
+                                    <a>删除</a>
+                                </Popconfirm>
+                            </Authorized>
+                        )}
 
-                            {this.renderOperateColumnExtend(record)}
-                        </Fragment>
+                        {this.renderOperateColumnExtend(record)}
+                    </Fragment>
                 )
             }
         )

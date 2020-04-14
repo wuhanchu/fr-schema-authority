@@ -24,6 +24,14 @@ export default {
             title: "地址"
             // addHide: true
         },
+        department_key: {
+            title: "部门",
+            type: schemaFieldType.Select,
+            props:{
+                mode:"multiple"
+            }
+            // addHide: true
+        },
         roles: {
             title: "角色",
             addHide: true,
