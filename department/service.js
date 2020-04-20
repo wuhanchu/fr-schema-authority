@@ -1,10 +1,8 @@
 import schemas from "./schema"
 
-import frSchema from "@/outter/fr-schema/src"
-
-const { createApi } = frSchema
+import { createApi } from "@/outter/fr-schema/src/service";
 
 // 用户
-let service = createApi("user_auth/department", schemas)
+let service = createApi("user_auth/department", schemas, null, "eq.")
 
 export default service
