@@ -32,9 +32,9 @@ export class User extends ListPage {
         })
     }
 
-    componentDidMount = () => {
-        this.handleGetRoleList()
-        this.handleGetDepartmentList()
+    componentDidMount = async () => {
+        await this.handleGetRoleList()
+        await this.handleGetDepartmentList()
         super.componentDidMount()
     }
 
