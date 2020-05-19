@@ -2,7 +2,8 @@ import antdUtils from "@/outter/fr-schema-antd-utils/src"
 
 import schema from "./schema"
 import service from "./service"
-import { Form } from "antd"
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
 import clone from "clone"
 
 const { ListPage } = antdUtils.components

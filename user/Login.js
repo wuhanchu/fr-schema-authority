@@ -148,7 +148,7 @@ class Login extends Component {
                         />
                     </div>
                     <Submit loading={submitting}>
-                        <FormattedMessage id="user-login.login.login" />
+                        <FormattedMessage id="user-login.login.login"/>
                     </Submit>
                     <div className={styles.other}>
                         <div

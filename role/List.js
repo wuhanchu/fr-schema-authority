@@ -2,7 +2,9 @@ import frSchema from "@/outter/fr-schema/src"
 import antdUtils from "@/outter/fr-schema-antd-utils/src"
 import schemas from "./schemas"
 import services from "./services"
-import { Divider, Form, message, Modal, Popconfirm, Tree } from "antd"
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Divider, message, Modal, Popconfirm, Tree } from "antd";
 import { Fragment } from "react"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
 import FunctionTree from "../permission/components/FunctionTree"

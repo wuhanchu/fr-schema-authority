@@ -4,7 +4,9 @@ import antdUtils from "@/outter/fr-schema-antd-utils/src"
 import schemas from "./schemas"
 import services from "./services"
 import { Fragment } from "react"
-import { Divider, Form, message, Popconfirm, Select } from "antd"
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Divider, message, Popconfirm, Select } from "antd";
 import InfoModal from "@/outter/fr-schema-antd-utils/src/components/Page/InfoModal"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
 import roleServices from "../role/services"

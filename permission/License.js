@@ -1,5 +1,7 @@
 import React, { Fragment, PureComponent } from "react"
-import { Button, Card, Col, Divider, Form, Row, Skeleton } from "antd"
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Button, Card, Col, Divider, Row, Skeleton } from "antd";
 import InfoForm from "@/outter/fr-schema-antd-utils/src/components/Page/InfoForm"
 import PageHeaderWrapper from "@ant-design/pro-layout/lib/PageHeaderWrapper"
 import LicenseUpload from "@/pages/authority/permission/components/LicenseUpload"
@@ -8,7 +10,8 @@ import schemas from "./schemas"
 
 import frSchema from "@/outter/fr-schema/src"
 const { actions } = frSchema
-import config from "@/config"
+import config from "@/../config/defaultSettings"
+
 /**
  * 注册信息界面
  */

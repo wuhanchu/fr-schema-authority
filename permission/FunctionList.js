@@ -1,7 +1,8 @@
 import { antdUtils } from "@/outter"
 import schemas from "./schemas"
 import services from "./services"
-import { Form } from "antd"
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
 
 const { ListPage } = antdUtils.components
 

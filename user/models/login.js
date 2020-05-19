@@ -1,10 +1,11 @@
-import { routerRedux } from "dva/router"
-import { message } from "antd"
+import { router } from "dva"
 import { stringify } from "qs"
 import services from "../services"
 import { reloadAuthorized } from "@/outter/fr-schema-antd-utils/src/utils/Authorized"
 import { setAuthority } from "@/outter/fr-schema-antd-utils/src/utils/authority"
 import { getPageQuery } from "@/outter/fr-schema-antd-utils/src/utils/utils"
+
+const routerRedux = router
 
 export default {
     namespace: "login",
@@ -14,7 +15,7 @@ export default {
     },
 
     effects: {
-        *login({ payload }, { call, put, take }) {
+        * login({ payload }, { call, put, take }) {
             localStorage.clear()
             sessionStorage.clear()
 
@@ -57,7 +58,7 @@ export default {
             }
         },
 
-        *logout(_, { put }) {
+        * logout(_, { put }) {
             yield put({
                 type: "changeLoginStatus",
                 payload: {

@@ -1,7 +1,8 @@
 import antdUtils from "@/outter/fr-schema-antd-utils.src"
 import schemas from "./schemas"
 import services from "./services"
-import { Form } from "antd"
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
 
 import { Fragment } from "react"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
