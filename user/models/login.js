@@ -1,11 +1,9 @@
-import { router } from "dva"
 import { stringify } from "qs"
+import { history } from "umi";
 import services from "../services"
 import { reloadAuthorized } from "@/outter/fr-schema-antd-utils/src/utils/Authorized"
 import { setAuthority } from "@/outter/fr-schema-antd-utils/src/utils/authority"
 import { getPageQuery } from "@/outter/fr-schema-antd-utils/src/utils/utils"
-
-const routerRedux = router
 
 export default {
     namespace: "login",
@@ -74,14 +72,14 @@ export default {
             sessionStorage.clear()
 
             if (window.location.pathname !== "/user/login" && !redirect) {
-                yield put(
-                    routerRedux.replace({
-                        pathname: "/user/login",
-                        search: stringify({
-                            redirect: window.location.href
-                        })
-                    })
-                )
+
+                history.replace({
+                    pathname: '/user/login',
+                    search: stringify({
+                        redirect: window.location.href,
+                    }),
+                });
+
             }
         }
     },
