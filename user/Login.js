@@ -1,5 +1,5 @@
 import { Alert } from "antd"
-import { formatMessage, FormattedMessage } from "umi-plugin-react/locale"
+import { formatMessage, FormattedMessage } from "umi"
 import React, { Component } from "react"
 import { connect } from "dva"
 import LoginComponents from "./components/Login"
