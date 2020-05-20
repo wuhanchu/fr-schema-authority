@@ -32,27 +32,13 @@ export default {
                 yield take("user/fetchCurrent/@@end")
 
                 //get user
-                const urlParams = new URL(window.location.href)
                 const params = getPageQuery()
                 let { redirect } = params
                 if (redirect) {
-                    const redirectUrlParams = new URL(redirect)
-                    if (redirectUrlParams.origin === urlParams.origin) {
-                        redirect = redirect.substr(urlParams.origin.length)
-                        if (redirect.startsWith("/#")) {
-                            redirect = redirect.substr(2)
-                        }
-                        if (redirect.startsWith("/static")) {
-                            redirect = redirect.substr(7)
-                        }
-                        // yield put(routerRedux.replace(redirect || "/"))
-                    } else {
-                        // window.location.href = redirect
-                    }
                     window.location.replace(redirect)
+                }else{
+                    window.location.replace(BASE_PATH)
                 }
-
-                window.location.replace(BASE_PATH)
             }
         },
 

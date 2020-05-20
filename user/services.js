@@ -21,6 +21,8 @@ const convertRole = item => {
  */
 users.login = params => {
     const client = oauth()
+    console.debug("login params",params)
+
     return client.owner.getToken(params.userName, params.password).catch(e => {
         throw new Error("登录出错")
     })
