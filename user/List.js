@@ -1,5 +1,4 @@
 import frSchema from "@/outter/fr-schema/src"
-import antdUtils from "@/outter/fr-schema-antd-utils/src"
 
 import schemas from "./schemas"
 import services from "./services"
@@ -13,11 +12,11 @@ import roleServices from "../role/services"
 import clone from "clone"
 
 import departmentService from "../department/service"
+import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage";
 
 const { utils, actions } = frSchema
 
 const { Option } = Select
-const { ListPage } = antdUtils.components
 
 /**
  * 通话记录
