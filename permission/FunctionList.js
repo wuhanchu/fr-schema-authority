@@ -1,10 +1,9 @@
-import { antdUtils } from "@/outter"
 import schemas from "./schemas"
 import services from "./services"
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
+import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage";
 
-const { ListPage } = antdUtils.components
 
 /**
  * function list contonerl front page show
