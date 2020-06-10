@@ -36,7 +36,7 @@ export default {
                 let { redirect } = params
                 if (redirect) {
                     window.location.replace(redirect)
-                }else{
+                } else {
                     window.location.replace(BASE_PATH)
                 }
             }
@@ -57,15 +57,13 @@ export default {
             localStorage.clear()
             sessionStorage.clear()
 
-            if (window.location.pathname !== "/user/login" && !redirect) {
-
+            if (!window.location.pathname.endsWith("/user/login") && !redirect) {
                 history.replace({
                     pathname: '/user/login',
                     search: stringify({
                         redirect: window.location.href,
                     }),
                 });
-
             }
         }
     },
