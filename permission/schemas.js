@@ -68,7 +68,7 @@ export default {
         //     editHide: true
         // }
     },
-    function: {
+    func: {
         name: {
             title: "名称",
             required: true

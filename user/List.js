@@ -1,14 +1,14 @@
 import frSchema from "@/outter/fr-schema/src"
 
-import schemas from "./schemas"
-import services from "./services"
+import schema from "./schema"
+import service from "./service"
 import { Fragment } from "react"
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Divider, message, Popconfirm, Select } from "antd";
 import InfoModal from "@/outter/fr-schema-antd-utils/src/components/Page/InfoModal"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
-import roleServices from "../role/services"
+import roleservice from "../role/service"
 import clone from "clone"
 
 import departmentService from "../department/service"
@@ -24,12 +24,12 @@ const { Option } = Select
 export class User extends ListPage {
     constructor(props) {
         super(props, {
-            schema: clone(schemas.user),
+            schema: clone(schema.user),
             authorityKey: "user",
             infoProps: {
                 offline: true
             },
-            service: services.users
+            service: service
         })
     }
 
@@ -73,7 +73,7 @@ export class User extends ListPage {
     }
 
     handleGetRoleList = async () => {
-        const roleList = await roleServices.roles.get()
+        const roleList = await roleservice.get()
         let data = utils.dict.listToDict(
             roleList.list,
             null,

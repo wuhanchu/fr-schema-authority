@@ -7,9 +7,9 @@ const { createApi, oauth, utils } = frSchema
 
 const { request } = utils
 
-// user function
-let permissions = createApi("user_auth/permission", schemas.permission)
-let functions = createApi("user_auth/permission_scope", schemas.function)
+// user func
+let permission = createApi("user_auth/permission", schemas.permission)
+let func = createApi("user_auth/permission_scope", schemas.func)
 
 // 证书
 const license = {}
@@ -39,7 +39,7 @@ license.get = createBasicApi("user_auth/license", null, {
 
 // return
 export default {
-    permissions,
-    functions,
+    permission,
+    func,
     license
 }

@@ -1,6 +1,6 @@
 import frSchema from "@/outter/fr-schema/src"
-import schemas from "./schemas"
-import services from "./services"
+import schema from "./schema"
+import service from "./service"
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Divider, message, Modal, Popconfirm } from "antd";
@@ -19,8 +19,8 @@ const {  actions } = frSchema
 class Role extends ListPage {
     constructor(props) {
         super(props, {
-            schema: schemas.role,
-            service: services.roles,
+            schema: schema.role,
+            service: service,
             infoProps: {
                 offline: true
             },

@@ -1,4 +1,4 @@
-import services from "../services"
+import service from "../service"
 import lodash from "lodash"
 import { reloadAuthorized } from "@/outter/fr-schema-antd-utils/src/utils/Authorized"
 import { message } from "antd"
@@ -14,7 +14,7 @@ export default {
 
     effects: {
         *fetch(_, { call, put }) {
-            const response = yield call(services.users.get)
+            const response = yield call(service.get)
             yield put({
                 type: "save",
                 payload: response
@@ -22,7 +22,7 @@ export default {
         },
         *fetchCurrent(_, { call, put, select, take }) {
             try {
-                const response = yield call(services.users.queryCurrent)
+                const response = yield call(service.queryCurrent)
 
                 if (response instanceof Error) {
                     throw response

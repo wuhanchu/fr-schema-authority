@@ -2,7 +2,7 @@ import React, { Fragment, PureComponent } from "react"
 import { Col, Divider, Input, Row, Skeleton, Switch, Tree } from "antd"
 import services from "../services"
 
-import roleServices from "../../role/services.js"
+import roleServices from "../../role/service.js"
 
 import { globalStyle } from "@/styles/global"
 import clone from "clone"
@@ -28,7 +28,7 @@ export class FunctionTree extends PureComponent {
 
         this.functitonMap = {}
 
-        let functionList = (await services.functions.get({
+        let functionList = (await services.funcs.get({
             pageSize: 9999,
             order: "parent_key.desc"
         })).list
@@ -50,7 +50,7 @@ export class FunctionTree extends PureComponent {
             return result
         })
 
-        const checkedKeys = (await roleServices.roles.getFunctions({
+        const checkedKeys = (await roleServices.getFunctions({
             role_id: roleRecord.id,
             pageSize: 9999
         })).list.map(item => item.product_key + "_" + item.key)

@@ -12,8 +12,8 @@ import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage
 class FunctionList extends ListPage {
     constructor(props) {
         super(props, {
-            schema: schemas.function,
-            service: services.functions,
+            schema: schemas.func,
+            service: services.funcs,
             authorityKey: "permission_scope"
         })
     }
