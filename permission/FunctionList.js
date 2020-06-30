@@ -13,7 +13,7 @@ class FunctionList extends ListPage {
     constructor(props) {
         super(props, {
             schema: schemas.func,
-            service: services.funcs,
+            service: services.func,
             authorityKey: "permission_scope"
         })
     }
