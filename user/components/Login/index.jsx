@@ -1,6 +1,6 @@
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Tabs } from "antd";
+import { Form } from "@ant-design/compatible"
+import "@ant-design/compatible/assets/index.css"
+import { Tabs } from "antd"
 import React, { Component } from "react"
 import classNames from "classnames"
 import LoginContext from "./LoginContext"
@@ -16,7 +16,7 @@ class Login extends Component {
         className: "",
         defaultActiveKey: "",
         onTabChange: () => {},
-        onSubmit: () => {}
+        onSubmit: () => {},
     }
 
     constructor(props) {
@@ -24,7 +24,7 @@ class Login extends Component {
         this.state = {
             type: props.defaultActiveKey,
             tabs: [],
-            active: {}
+            active: {},
         }
     }
 
@@ -36,10 +36,10 @@ class Login extends Component {
         }
     }
 
-    onSwitch = type => {
+    onSwitch = (type) => {
         this.setState(
             {
-                type
+                type,
             },
             () => {
                 const { onTabChange } = this.props
@@ -55,19 +55,19 @@ class Login extends Component {
         const { tabs = [] } = this.state
         return {
             tabUtil: {
-                addTab: id => {
+                addTab: (id) => {
                     this.setState({
-                        tabs: [...tabs, id]
+                        tabs: [...tabs, id],
                     })
                 },
-                removeTab: id => {
+                removeTab: (id) => {
                     this.setState({
-                        tabs: tabs.filter(currentId => currentId !== id)
+                        tabs: tabs.filter((currentId) => currentId !== id),
                     })
-                }
+                },
             },
             form: { ...form },
-            updateActive: activeItem => {
+            updateActive: (activeItem) => {
                 const { type = "", active = {} } = this.state
 
                 if (active[type]) {
@@ -77,12 +77,12 @@ class Login extends Component {
                 }
 
                 this.setState({
-                    active
+                    active,
                 })
-            }
+            },
         }
     }
-    handleSubmit = e => {
+    handleSubmit = (e) => {
         e.preventDefault()
         const { active = {}, type = "" } = this.state
         const { form, onSubmit } = this.props
@@ -92,7 +92,7 @@ class Login extends Component {
             form.validateFields(
                 activeFields,
                 {
-                    force: true
+                    force: true,
                 },
                 (err, values) => {
                     if (onSubmit) {
@@ -108,7 +108,7 @@ class Login extends Component {
         const { type, tabs = [] } = this.state
         const TabChildren = []
         const otherChildren = []
-        React.Children.forEach(children, child => {
+        React.Children.forEach(children, (child) => {
             if (!child) {
                 return
             }
@@ -145,7 +145,7 @@ class Login extends Component {
     }
 }
 
-Object.keys(LoginItem).forEach(item => {
+Object.keys(LoginItem).forEach((item) => {
     Login[item] = LoginItem[item]
 })
 export default Form.create()(Login)

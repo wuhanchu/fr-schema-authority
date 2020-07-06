@@ -73,5 +73,5 @@ export default {
     "user-login.option.A": "同事甲",
     "user-login.option.B": "同事乙",
     "user-login.option.C": "同事丙",
-    "user-login.navBar.lang": "语言"
+    "user-login.navBar.lang": "语言",
 }

@@ -1,11 +1,11 @@
-import schemas from "./schemas"
-import services from "./services"
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
+import schema from "./schema"
+import service from "./service"
+import { Form } from "@ant-design/compatible"
+import "@ant-design/compatible/assets/index.css"
 
 import { Fragment } from "react"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
-import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage";
+import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage"
 
 /**
  * 通话记录
@@ -14,9 +14,9 @@ import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage
 class List extends ListPage {
     constructor(props) {
         super(props, {
-            schema: schemas.permission,
-            service: services.permissions,
-            authorityKey: "permission"
+            schema: schema,
+            service: service,
+            authorityKey: "permission",
         })
     }
 
@@ -58,7 +58,7 @@ class List extends ListPage {
                         )}
                         {this.renderOperateColumnExtend(record)}
                     </Fragment>
-                )
+                ),
             }
         )
     }

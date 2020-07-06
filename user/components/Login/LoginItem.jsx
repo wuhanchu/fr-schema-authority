@@ -1,24 +1,25 @@
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Button, Col, Input, Row } from "antd";
+import { Form } from "@ant-design/compatible"
+import "@ant-design/compatible/assets/index.css"
+import { Button, Col, Input, Row } from "antd"
 import React, { Component } from "react"
 import omit from "omit.js"
 import ItemMap from "./map"
 import LoginContext from "./LoginContext"
 import styles from "./index.less"
+
 const FormItem = Form.Item
 
 class WrapFormItem extends Component {
     static defaultProps = {
         getCaptchaButtonText: "captcha",
-        getCaptchaSecondText: "second"
+        getCaptchaSecondText: "second",
     }
     interval = undefined
 
     constructor(props) {
         super(props)
         this.state = {
-            count: 0
+            count: 0,
         }
     }
 
@@ -52,10 +53,10 @@ class WrapFormItem extends Component {
         onChange,
         defaultValue,
         customProps = {},
-        rules
+        rules,
     }) => {
         const options = {
-            rules: rules || customProps.rules
+            rules: rules || customProps.rules,
         }
 
         if (onChange) {
@@ -72,12 +73,12 @@ class WrapFormItem extends Component {
         const { countDown } = this.props
         let count = countDown || 59
         this.setState({
-            count
+            count,
         })
         this.interval = window.setInterval(() => {
             count -= 1
             this.setState({
-                count
+                count,
             })
 
             if (count === 0) {
@@ -123,9 +124,10 @@ class WrapFormItem extends Component {
                 <FormItem>
                     <Row gutter={8}>
                         <Col span={16}>
-                            {getFieldDecorator(name, options)(
-                                <Input {...customProps} {...inputProps} />
-                            )}
+                            {getFieldDecorator(
+                                name,
+                                options
+                            )(<Input {...customProps} {...inputProps} />)}
                         </Col>
                         <Col span={8}>
                             <Button
@@ -146,21 +148,22 @@ class WrapFormItem extends Component {
 
         return (
             <FormItem>
-                {getFieldDecorator(name, options)(
-                    <Input {...customProps} {...otherProps} />
-                )}
+                {getFieldDecorator(
+                    name,
+                    options
+                )(<Input {...customProps} {...otherProps} />)}
             </FormItem>
         )
     }
 }
 
 const LoginItem = {}
-Object.keys(ItemMap).forEach(key => {
+Object.keys(ItemMap).forEach((key) => {
     const item = ItemMap[key]
 
-    LoginItem[key] = props => (
+    LoginItem[key] = (props) => (
         <LoginContext.Consumer>
-            {context => (
+            {(context) => (
                 <WrapFormItem
                     customProps={item.props}
                     rules={item.rules}

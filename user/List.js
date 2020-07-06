@@ -3,16 +3,16 @@ import frSchema from "@/outter/fr-schema/src"
 import schema from "./schema"
 import service from "./service"
 import { Fragment } from "react"
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Divider, message, Popconfirm, Select } from "antd";
+import { Form } from "@ant-design/compatible"
+import "@ant-design/compatible/assets/index.css"
+import { Divider, message, Popconfirm, Select } from "antd"
 import InfoModal from "@/outter/fr-schema-antd-utils/src/components/Page/InfoModal"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
 import roleservice from "../role/service"
 import clone from "clone"
 
 import departmentService from "../department/service"
-import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage";
+import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage"
 
 const { utils, actions } = frSchema
 
@@ -27,9 +27,9 @@ export class User extends ListPage {
             schema: clone(schema.user),
             authorityKey: "user",
             infoProps: {
-                offline: true
+                offline: true,
             },
-            service: service
+            service: service,
         })
     }
 
@@ -43,7 +43,7 @@ export class User extends ListPage {
         this.setState({
             editRoleVisible: !!flag,
             infoData: record,
-            action
+            action,
         })
     }
 
@@ -62,12 +62,7 @@ export class User extends ListPage {
 
     handleGetDepartmentList = async () => {
         const response = await departmentService.get()
-        let data = utils.dict.listToDict(
-            response.list,
-            null,
-            "key",
-            "name"
-        )
+        let data = utils.dict.listToDict(response.list, null, "key", "name")
 
         this.schema.department_key.dict = data
     }
@@ -82,7 +77,7 @@ export class User extends ListPage {
         )
         this.schema.roles.dict = data
         this.setState({
-            roleList: data
+            roleList: data,
         })
     }
 
@@ -94,54 +89,54 @@ export class User extends ListPage {
             !this.props.readOnly && {
                 title: "操作",
                 fixed: scroll && "right",
-                render: (text, record) => (
-                    record.name != "admin" &&
-                    <Fragment>
-                        {showEdit && (
-                            <Authorized
-                                authority={
-                                    this.meta.authority &&
-                                    this.meta.authority.update
-                                }
-                                noMatch={null}
-                            >
-                                <a
-                                    onClick={() =>
-                                        this.handleVisibleModal(
-                                            true,
-                                            record,
-                                            actions.edit
-                                        )
+                render: (text, record) =>
+                    record.name != "admin" && (
+                        <Fragment>
+                            {showEdit && (
+                                <Authorized
+                                    authority={
+                                        this.meta.authority &&
+                                        this.meta.authority.update
                                     }
+                                    noMatch={null}
                                 >
-                                    修改
-                                </a>
-                            </Authorized>
-                        )}
-                        {showDelete && (
-                            <Authorized
-                                authority={
-                                    this.meta.authority &&
-                                    this.meta.authority.delete
-                                }
-                                noMatch={null}
-                            >
-                                <Divider type="vertical"/>
-                                <Popconfirm
-                                    title="删除用户会影响相关数据的显示，确认删除？"
-                                    onConfirm={e => {
-                                        this.handleDelete(record)
-                                        e.stopPropagation()
-                                    }}
+                                    <a
+                                        onClick={() =>
+                                            this.handleVisibleModal(
+                                                true,
+                                                record,
+                                                actions.edit
+                                            )
+                                        }
+                                    >
+                                        修改
+                                    </a>
+                                </Authorized>
+                            )}
+                            {showDelete && (
+                                <Authorized
+                                    authority={
+                                        this.meta.authority &&
+                                        this.meta.authority.delete
+                                    }
+                                    noMatch={null}
                                 >
-                                    <a>删除</a>
-                                </Popconfirm>
-                            </Authorized>
-                        )}
+                                    <Divider type="vertical" />
+                                    <Popconfirm
+                                        title="删除用户会影响相关数据的显示，确认删除？"
+                                        onConfirm={(e) => {
+                                            this.handleDelete(record)
+                                            e.stopPropagation()
+                                        }}
+                                    >
+                                        <a>删除</a>
+                                    </Popconfirm>
+                                </Authorized>
+                            )}
 
-                        {this.renderOperateColumnExtend(record)}
-                    </Fragment>
-                )
+                            {this.renderOperateColumnExtend(record)}
+                        </Fragment>
+                    ),
             }
         )
     }
@@ -151,7 +146,7 @@ export class User extends ListPage {
         if (record.name == "admin") return null
         return (
             <Authorized authority={"user_role_put"} noMatch={null}>
-                <Divider type="vertical"/>
+                <Divider type="vertical" />
                 <a
                     onClick={() => {
                         this.setState({ editRoleVisible: true, record: record })
@@ -169,7 +164,7 @@ export class User extends ListPage {
         const { editRoleVisible, record } = this.state
         const updateMethods = {
             handleVisibleModal: this.handleRoleVisibleModal,
-            handleUpdate: this.handleRoleUpdate
+            handleUpdate: this.handleRoleUpdate,
         }
         const { id, name, roles } = this.schema
 
@@ -191,21 +186,21 @@ export class User extends ListPage {
                             ...id,
                             title: "id",
                             editHide: true,
-                            readOnly: true
+                            readOnly: true,
                         },
                         name: {
                             ...name,
                             required: false,
                             // editHide: true,
-                            readOnly: true
+                            readOnly: true,
                         },
                         roles: {
                             ...roles,
                             dict: this.state.roleList,
                             required: true,
                             editHide: false,
-                            infoHide: false
-                        }
+                            infoHide: false,
+                        },
                     }}
                 />
             )

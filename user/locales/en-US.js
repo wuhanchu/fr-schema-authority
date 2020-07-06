@@ -77,5 +77,5 @@ export default {
     "user-login.option.A": "Colleague A",
     "user-login.option.B": "Colleague B",
     "user-login.option.C": "Colleague C",
-    "user-login.navBar.lang": "Languages"
+    "user-login.navBar.lang": "Languages",
 }

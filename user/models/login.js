@@ -1,5 +1,5 @@
 import { stringify } from "qs"
-import { history } from "umi";
+import { history } from "umi"
 import service from "../service"
 import { reloadAuthorized } from "@/outter/fr-schema-antd-utils/src/utils/Authorized"
 import { setAuthority } from "@/outter/fr-schema-antd-utils/src/utils/authority"
@@ -9,11 +9,11 @@ export default {
     namespace: "login",
 
     state: {
-        status: undefined
+        status: undefined,
     },
 
     effects: {
-        * login({ payload }, { call, put, take }) {
+        *login({ payload }, { call, put, take }) {
             localStorage.clear()
             sessionStorage.clear()
 
@@ -25,7 +25,7 @@ export default {
 
                 yield put({
                     type: "save",
-                    payload: { token: token.data }
+                    payload: { token: token.data },
                 })
 
                 yield put({ type: "user/fetchCurrent" })
@@ -42,13 +42,13 @@ export default {
             }
         },
 
-        * logout(_, { put }) {
+        *logout(_, { put }) {
             yield put({
                 type: "changeLoginStatus",
                 payload: {
                     status: false,
-                    currentAuthority: "guest"
-                }
+                    currentAuthority: "guest",
+                },
             })
             reloadAuthorized()
 
@@ -57,15 +57,18 @@ export default {
             localStorage.clear()
             sessionStorage.clear()
 
-            if (!window.location.pathname.endsWith("/user/login") && !redirect) {
+            if (
+                !window.location.pathname.endsWith("/user/login") &&
+                !redirect
+            ) {
                 history.replace({
-                    pathname: '/user/login',
+                    pathname: "/user/login",
                     search: stringify({
                         redirect: window.location.href,
                     }),
-                });
+                })
             }
-        }
+        },
     },
     reducers: {
         changeLoginStatus(state, { payload }) {
@@ -73,8 +76,8 @@ export default {
             return {
                 ...state,
                 status: payload.status,
-                type: payload.type
+                type: payload.type,
             }
-        }
-    }
+        },
+    },
 }

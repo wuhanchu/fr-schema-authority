@@ -1,6 +1,7 @@
 import React, { Component } from "react"
 import { Tabs } from "antd"
 import LoginContext from "./LoginContext"
+
 const { TabPane } = Tabs
 
 const generateId = (() => {
@@ -33,9 +34,9 @@ class LoginTab extends Component {
     }
 }
 
-const WrapContext = props => (
+const WrapContext = (props) => (
     <LoginContext.Consumer>
-        {value => <LoginTab tabUtil={value.tabUtil} {...props} />}
+        {(value) => <LoginTab tabUtil={value.tabUtil} {...props} />}
     </LoginContext.Consumer>
 ) // 标志位 用来判断是不是自定义组件
 

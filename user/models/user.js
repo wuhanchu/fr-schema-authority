@@ -9,7 +9,7 @@ export default {
     state: {
         init: null,
         list: [],
-        currentUser: null
+        currentUser: null,
     },
 
     effects: {
@@ -17,7 +17,7 @@ export default {
             const response = yield call(service.get)
             yield put({
                 type: "save",
-                payload: response
+                payload: response,
             })
         },
         *fetchCurrent(_, { call, put, select, take }) {
@@ -31,19 +31,19 @@ export default {
                 const user = response
                 yield put({
                     type: "saveCurrentUser",
-                    payload: response
+                    payload: response,
                 })
 
                 // 权限拼接
                 let permissions = []
                 user.roles &&
-                    user.roles.forEach(item => {
+                    user.roles.forEach((item) => {
                         permissions.push(item.name)
                     })
 
                 // The iteration of function
                 user.permission_scopes &&
-                    user.permission_scopes.forEach(item => {
+                    user.permission_scopes.forEach((item) => {
                         item.key && permissions.push(item.key)
                     })
 
@@ -58,8 +58,8 @@ export default {
                         type: "account",
                         status: "ok",
                         user,
-                        currentAuthority: [].concat(permissions)
-                    }
+                        currentAuthority: [].concat(permissions),
+                    },
                 })
                 take("login/changeLoginStatus/@@end")
                 reloadAuthorized()
@@ -67,27 +67,27 @@ export default {
                 yield put({
                     type: "save",
                     payload: {
-                        init: true
-                    }
+                        init: true,
+                    },
                 })
             } catch (e) {
                 console.log("error", e)
                 e.message && message.error(e.message)
             }
-        }
+        },
     },
 
     reducers: {
         save(state, action) {
             return {
                 ...state,
-                ...action.payload
+                ...action.payload,
             }
         },
         saveCurrentUser(state, action) {
             return {
                 ...state,
-                currentUser: action.payload || {}
+                currentUser: action.payload || {},
             }
         },
         changeNotifyCount(state, action) {
@@ -96,9 +96,9 @@ export default {
                 currentUser: {
                     ...state.currentUser,
                     notifyCount: action.payload.totalCount,
-                    unreadCount: action.payload.unreadCount
-                }
+                    unreadCount: action.payload.unreadCount,
+                },
             }
-        }
-    }
+        },
+    },
 }

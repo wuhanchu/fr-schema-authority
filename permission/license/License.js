@@ -1,16 +1,17 @@
-import React, { Fragment, PureComponent } from "react"
+import React, { Fragment, PureComponent } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Button, Card, Col, Divider, Row, Skeleton } from "antd";
-import InfoForm from "@/outter/fr-schema-antd-utils/src/components/Page/InfoForm"
-import PageHeaderWrapper from "@ant-design/pro-layout/lib/PageHeaderWrapper"
-import LicenseUpload from "@/pages/authority/permission/components/LicenseUpload"
-import services from "./services"
-import schemas from "./schemas"
+import { Button, Card, Col, Divider, Row, Skeleton } from 'antd';
+import InfoForm from '@/outter/fr-schema-antd-utils/src/components/Page/InfoForm';
+import PageHeaderWrapper from '@ant-design/pro-layout/lib/PageHeaderWrapper';
+import LicenseUpload from '@/pages/authority/permission/license/LicenseUpload';
+import service from './service';
+import schema from './schema';
 
-import frSchema from "@/outter/fr-schema/src"
+import frSchema from '@/outter/fr-schema/src';
+import config from '../../../../../config/defaultSettings';
+
 const { actions } = frSchema
-import config from "@/../config/defaultSettings"
 
 /**
  * 注册信息界面
@@ -28,7 +29,7 @@ class License extends PureComponent {
 
     setData = async () => {
         const { product_key } = config
-        const res = await services.license.get({ product_key })
+        const res = await service.get({ product_key })
 
         this.setState({
             loading: false,
@@ -85,7 +86,7 @@ class License extends PureComponent {
                                     <InfoForm
                                         action={actions.show}
                                         values={data}
-                                        schema={schemas.license}
+                                        schema={schema}
                                         form={this.props.form}
                                     />
                                 </Col>

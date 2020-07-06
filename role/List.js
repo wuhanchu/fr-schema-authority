@@ -1,15 +1,15 @@
 import frSchema from "@/outter/fr-schema/src"
 import schema from "./schema"
 import service from "./service"
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import { Divider, message, Modal, Popconfirm } from "antd";
+import { Form } from "@ant-design/compatible"
+import "@ant-design/compatible/assets/index.css"
+import { Divider, message, Modal, Popconfirm } from "antd"
 import { Fragment } from "react"
 import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
 import FunctionTree from "../permission/components/FunctionTree"
-import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage";
+import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage"
 
-const {  actions } = frSchema
+const { actions } = frSchema
 
 /**
  * 通话记录
@@ -22,9 +22,9 @@ class Role extends ListPage {
             schema: schema.role,
             service: service,
             infoProps: {
-                offline: true
+                offline: true,
             },
-            authorityKey: "role"
+            authorityKey: "role",
         })
         this.state.roleList = []
         this.state.showData = []
@@ -89,10 +89,10 @@ class Role extends ListPage {
                                     <Divider type="vertical" />
                                     <Popconfirm
                                         title="是否要删除此行？"
-                                        onConfirm={async e => {
+                                        onConfirm={async (e) => {
                                             await this.service.putFunctions({
                                                 role_id: this.state.record.id,
-                                                role_permission_group_ids: []
+                                                role_permission_group_ids: [],
                                             })
                                             this.handleDelete(record)
                                             e.stopPropagation()
@@ -104,7 +104,7 @@ class Role extends ListPage {
                             )}
                             {this.renderOperateColumnExtend(record)}
                         </Fragment>
-                    )
+                    ),
             }
         )
     }
@@ -113,7 +113,7 @@ class Role extends ListPage {
         try {
             await this.service.putFunctions({
                 id: this.state.record.id,
-                role_permission_scope: this.state.permissionScopeList
+                role_permission_scope: this.state.permissionScopeList,
             })
         } catch (error) {
             message.error("权限相同")
@@ -127,11 +127,11 @@ class Role extends ListPage {
         const permissionList = await this.service.queryPermissionList()
         this.setState({
             roleList: permissionList.list,
-            showData: permissionList.list
+            showData: permissionList.list,
         })
     }
 
-    handleSetPermission = async record => {
+    handleSetPermission = async (record) => {
         let permissionList = await this.service.getPermission(record.id)
         let permissionDict = []
         for (let i = 0; i < permissionList.list.length; i++) {
@@ -140,7 +140,7 @@ class Role extends ListPage {
         this.setState({
             editPermissionVisible: true,
             record: record,
-            permissionDict: permissionDict
+            permissionDict: permissionDict,
         })
     }
 
@@ -175,8 +175,8 @@ class Role extends ListPage {
         )
     }
 
-    onChangeinput = value => {
-        let teacherList = this.state.roleList.filter(val => {
+    onChangeinput = (value) => {
+        let teacherList = this.state.roleList.filter((val) => {
             try {
                 return val.name.match(value.target.value)
             } catch {
@@ -184,7 +184,7 @@ class Role extends ListPage {
             }
         })
         this.setState({
-            showData: teacherList
+            showData: teacherList,
         })
     }
 
@@ -201,9 +201,9 @@ class Role extends ListPage {
                     }}
                 >
                     <FunctionTree
-                        onChange={permissionScopeList => {
+                        onChange={(permissionScopeList) => {
                             this.setState({
-                                permissionScopeList
+                                permissionScopeList,
                             })
                         }}
                         record={this.state.record}

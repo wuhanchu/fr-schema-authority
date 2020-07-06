@@ -4,24 +4,24 @@ import React, { Component } from "react"
 import { connect } from "dva"
 import LoginComponents from "./components/Login"
 import styles from "./Login.less"
-import LicenseUpload from "@/pages/authority/permission/components/LicenseUpload"
+import LicenseUpload from "@/pages/authority/permission/license/LicenseUpload"
 
 const { Tab, UserName, Password, Mobile, Captcha, Submit } = LoginComponents
 
 @connect(({ login, loading }) => ({
     userLogin: login,
-    submitting: loading.effects["login/login"]
+    submitting: loading.effects["login/login"],
 }))
 class Login extends Component {
     loginForm = undefined
     state = {
         type: "account",
-        autoLogin: true
+        autoLogin: true,
     }
 
-    changeAutoLogin = e => {
+    changeAutoLogin = (e) => {
         this.setState({
-            autoLogin: e.target.checked
+            autoLogin: e.target.checked,
         })
     }
     handleSubmit = (err, values) => {
@@ -31,13 +31,13 @@ class Login extends Component {
             const { dispatch } = this.props
             dispatch({
                 type: "login/login",
-                payload: { ...values, type }
+                payload: { ...values, type },
             })
         }
     }
-    onTabChange = type => {
+    onTabChange = (type) => {
         this.setState({
-            type
+            type,
         })
     }
     onGetCaptcha = () =>
@@ -58,7 +58,7 @@ class Login extends Component {
                         try {
                             const success = await dispatch({
                                 type: "login/getCaptcha",
-                                payload: values.mobile
+                                payload: values.mobile,
                             })
                             resolve(!!success)
                         } catch (error) {
@@ -68,10 +68,10 @@ class Login extends Component {
                 }
             )
         })
-    renderMessage = content => (
+    renderMessage = (content) => (
         <Alert
             style={{
-                marginBottom: 24
+                marginBottom: 24,
             }}
             message={content}
             type="error"
@@ -86,7 +86,7 @@ class Login extends Component {
                 <LicenseUpload
                     onCancel={() =>
                         this.setState({
-                            showLicenseUpload: false
+                            showLicenseUpload: false,
                         })
                     }
                 />
@@ -104,7 +104,7 @@ class Login extends Component {
                     defaultActiveKey={type}
                     onTabChange={this.onTabChange}
                     onSubmit={this.handleSubmit}
-                    onCreate={form => {
+                    onCreate={(form) => {
                         this.loginForm = form
                     }}
                 >
@@ -112,31 +112,31 @@ class Login extends Component {
                         <UserName
                             name="userName"
                             placeholder={`${formatMessage({
-                                id: "user-login.login.userName"
+                                id: "user-login.login.userName",
                             })}`}
                             rules={[
                                 {
                                     required: true,
                                     message: formatMessage({
-                                        id: "user-login.userName.required"
-                                    })
-                                }
+                                        id: "user-login.userName.required",
+                                    }),
+                                },
                             ]}
                         />
                         <Password
                             name="password"
                             placeholder={`${formatMessage({
-                                id: "user-login.login.password"
+                                id: "user-login.login.password",
                             })}`}
                             rules={[
                                 {
                                     required: true,
                                     message: formatMessage({
-                                        id: "user-login.password.required"
-                                    })
-                                }
+                                        id: "user-login.password.required",
+                                    }),
+                                },
                             ]}
-                            onPressEnter={e => {
+                            onPressEnter={(e) => {
                                 e.preventDefault()
 
                                 if (this.loginForm) {
@@ -148,7 +148,7 @@ class Login extends Component {
                         />
                     </div>
                     <Submit loading={submitting}>
-                        <FormattedMessage id="user-login.login.login"/>
+                        <FormattedMessage id="user-login.login.login" />
                     </Submit>
                     <div className={styles.other}>
                         <div

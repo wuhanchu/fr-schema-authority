@@ -1,9 +1,8 @@
-import schemas from "./schemas"
-import services from "./services"
-import { Form } from '@ant-design/compatible';
-import '@ant-design/compatible/assets/index.css';
-import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage";
-
+import schema from "./schema"
+import service from "./service"
+import { Form } from "@ant-design/compatible"
+import "@ant-design/compatible/assets/index.css"
+import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage"
 
 /**
  * function list contonerl front page show
@@ -12,9 +11,9 @@ import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage
 class FunctionList extends ListPage {
     constructor(props) {
         super(props, {
-            schema: schemas.func,
-            service: services.func,
-            authorityKey: "permission_scope"
+            schema: schema,
+            service: service,
+            authorityKey: "permission_scope",
         })
     }
 
