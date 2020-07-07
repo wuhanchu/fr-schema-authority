@@ -16,7 +16,7 @@ export default {
         title: "密码",
         required: true,
         listHide: true,
-        editHide: true,
+        // editHide: true,
         type: schemaFieldType.Password,
     },
     address: {
