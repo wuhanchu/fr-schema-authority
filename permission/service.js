@@ -1,43 +1,11 @@
-import schema from "./schema"
+import schema from './schema';
 
-import frSchema from "@/outter/fr-schema/src"
-import { createBasicApi } from "@/outter/fr-schema/src/service"
+import frSchema from '@/outter/fr-schema/src';
 
-const { createApi, oauth, utils } = frSchema
-
-const { request } = utils
+const { createApi, utils } = frSchema;
 
 // user func
-let permission = createApi("user_auth/permission", schema)
-
-// 证书
-const license = {}
-
-// 判断系统是否注册
-license.getIsRegistered = createApi("user_auth/license/check", null, {
-    skipOauth: true,
-}).getBasic
-
-// 返回注册码
-license.getMachieCode = createApi("user_auth/license", null, {
-    skipOauth: true,
-}).getBasic
-
-// 上传注册文件
-license.post = async (args) => {
-    const response = await createBasicApi("user_auth/license", null, {
-        skipOauth: true,
-    }).post(args)
-
-    return response.data
-}
-
-license.get = createBasicApi("user_auth/license", null, {
-    skipOauth: true,
-}).get
+let permission = createApi('user_auth/permission', schema);
 
 // return
-export default {
-    permission,
-    license,
-}
+export default permission;
