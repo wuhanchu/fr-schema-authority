@@ -1,6 +1,6 @@
 import React, { Fragment, PureComponent } from "react"
 import { Col, Divider, Input, Row, Skeleton, Switch, Tree } from "antd"
-import service from "../service"
+import service from "../scope/service"
 
 import roleService from "../../role/service.js"
 
