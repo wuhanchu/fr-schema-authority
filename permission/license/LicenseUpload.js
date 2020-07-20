@@ -5,7 +5,7 @@ import { message, Modal, Spin } from 'antd';
 import service from './service';
 import schema from './schema';
 import InfoModal from '@/outter/fr-schema-antd-utils/src/components/Page/InfoModal';
-import frSchema from '@/outter/fr-schema/src';
+import actions from '@/outter/fr-schema/src/actions';
 
 /**
  * handleAdd 提交后回调
@@ -60,7 +60,7 @@ class LicenseUpload extends PureComponent {
                 visible={true}
                 form={form}
                 schema={this.getSchema()}
-                action={frSchema.actions.edit}
+                action={actions.edit}
                 values={data}
                 handleUpdate={this.handleSubmit}
                 {...this.props}

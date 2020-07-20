@@ -1,5 +1,5 @@
 // 证书
-import { createBasicApi } from '@/outter/fr-schema/src/service';
+import { createApi, createBasicApi } from '@/outter/fr-schema/src/service';
 
 const license = {};
 

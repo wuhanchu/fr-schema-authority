@@ -1,6 +1,4 @@
-import frSchema from '@/outter/fr-schema/src';
-
-const { schemaFieldType } = frSchema;
+import { schemaFieldType } from "@/outter/fr-schema/src/schema";
 
 export default {
     machine_info: {

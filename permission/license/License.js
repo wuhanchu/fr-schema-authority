@@ -8,10 +8,8 @@ import LicenseUpload from '@/pages/authority/permission/license/LicenseUpload';
 import service from './service';
 import schema from './schema';
 
-import frSchema from '@/outter/fr-schema/src';
+import actions from '@/outter/fr-schema/src/actions';
 import config from '../../../../../config/defaultSettings';
-
-const { actions } = frSchema
 
 /**
  * 注册信息界面
@@ -63,8 +61,8 @@ class License extends PureComponent {
         return (
             <PageHeaderWrapper title={"注册信息"}>
                 <Card bordered={false} style={{ width: "100%" }}>
-                    {loading ? (
-                        <Skeleton />
+                    {loading? (
+                        <Skeleton/>
                     ) : (
                         <Fragment>
                             <Row justify="start" type="flex">
@@ -80,7 +78,7 @@ class License extends PureComponent {
                                     </Button>
                                 </Col>
                             </Row>
-                            <Divider />
+                            <Divider/>
                             <Row justify="start" type="flex">
                                 <Col>
                                     <InfoForm
