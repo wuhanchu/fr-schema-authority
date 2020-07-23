@@ -70,7 +70,7 @@ class Role extends ListPage {
                                         title="是否要删除此行？"
                                         onConfirm={async (e) => {
                                             await this.service.putFunctions({
-                                                role_id: this.state.record.id,
+                                                role_id: record.id,
                                                 role_permission_group_ids: [],
                                             });
                                             this.handleDelete(record);
