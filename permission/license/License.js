@@ -9,7 +9,7 @@ import service from './service';
 import schema from './schema';
 
 import actions from '@/outter/fr-schema/src/actions';
-import config from '../../../../../config/defaultSettings';
+import config from '../../../../../config/settting/standard';
 
 /**
  * 注册信息界面
