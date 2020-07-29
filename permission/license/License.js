@@ -9,7 +9,8 @@ import service from './service';
 import schema from './schema';
 
 import actions from '@/outter/fr-schema/src/actions';
-import config from '../../../../../config/settting/standard';
+
+const config = SETTING
 
 /**
  * 注册信息界面
