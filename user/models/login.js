@@ -13,7 +13,7 @@ export default {
     },
 
     effects: {
-        *login({ payload }, { call, put, take }) {
+        * login({ payload }, { call, put, take }) {
             localStorage.clear()
             sessionStorage.clear()
 
@@ -42,7 +42,13 @@ export default {
             }
         },
 
-        *logout(_, { put }) {
+        * logout(_, { put, call }) {
+            console.info("logout")
+
+            // 清理数据
+            yield call(service.logout)
+            localStorage.clear()
+            sessionStorage.clear()
             yield put({
                 type: "changeLoginStatus",
                 payload: {
@@ -52,21 +58,23 @@ export default {
             })
             reloadAuthorized()
 
+            // 返回登录
             const { redirect } = getPageQuery() // redirect
-
-            localStorage.clear()
-            sessionStorage.clear()
 
             if (
                 !window.location.pathname.endsWith("/user/login") &&
                 !redirect
             ) {
-                history.replace({
-                    pathname: "/user/login",
-                    search: stringify({
-                        redirect: window.location.href,
-                    }),
-                })
+                if (SETTING.loginPath) {
+                    location.href = SETTING.loginPath + "?" + SETTING.redirectName + "=" + window.location.href
+                } else {
+                    history.replace({
+                        pathname: "/user/login",
+                        search: stringify({
+                            redirect: window.location.href,
+                        }),
+                    })
+                }
             }
         },
     },
