@@ -5,6 +5,17 @@ import { reloadAuthorized } from "@/outter/fr-schema-antd-utils/src/utils/Author
 import { setAuthority } from "@/outter/fr-schema-antd-utils/src/utils/authority"
 import { getPageQuery } from "@/outter/fr-schema-antd-utils/src/utils/utils"
 
+function deleteAllCookies() {
+    let cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i];
+        let eqPos = cookie.indexOf("=");
+        let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+}
+
 export default {
     namespace: "login",
 
@@ -48,6 +59,8 @@ export default {
             // 清理数据
             localStorage.clear()
             sessionStorage.clear()
+            deleteAllCookies()
+
             yield put({
                 type: "changeLoginStatus",
                 payload: {
