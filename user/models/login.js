@@ -46,7 +46,6 @@ export default {
             console.info("logout")
 
             // 清理数据
-            yield call(service.logout)
             localStorage.clear()
             sessionStorage.clear()
             yield put({
@@ -75,6 +74,9 @@ export default {
                         }),
                     })
                 }
+
+                yield call(service.logout)
+
             }
         },
     },
