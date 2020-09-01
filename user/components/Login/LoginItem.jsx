@@ -1,7 +1,6 @@
-import { Form } from "@ant-design/compatible"
 import "@ant-design/compatible/assets/index.css"
-import { Button, Col, Input, Row } from "antd"
-import React, { Component } from "react"
+import {Button, Col, Input, Row, Form} from "antd"
+import React, {Component} from "react"
 import omit from "omit.js"
 import ItemMap from "./map"
 import LoginContext from "./LoginContext"
@@ -24,7 +23,7 @@ class WrapFormItem extends Component {
     }
 
     componentDidMount() {
-        const { updateActive, name = "" } = this.props
+        const {updateActive, name = ""} = this.props
 
         if (updateActive) {
             updateActive(name)
@@ -121,13 +120,10 @@ class WrapFormItem extends Component {
         if (type === "Captcha") {
             const inputProps = omit(otherProps, ["onGetCaptcha", "countDown"])
             return (
-                <FormItem>
+                <FormItem name={name} {...options}>
                     <Row gutter={8}>
                         <Col span={16}>
-                            {getFieldDecorator(
-                                name,
-                                options
-                            )(<Input {...customProps} {...inputProps} />)}
+                            <Input {...customProps} {...inputProps} />
                         </Col>
                         <Col span={8}>
                             <Button
@@ -147,11 +143,8 @@ class WrapFormItem extends Component {
         }
 
         return (
-            <FormItem>
-                {getFieldDecorator(
-                    name,
-                    options
-                )(<Input {...customProps} {...otherProps} />)}
+            <FormItem name={name} {...options}>
+                <Input {...customProps} {...otherProps} />
             </FormItem>
         )
     }

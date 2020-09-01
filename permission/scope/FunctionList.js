@@ -7,7 +7,6 @@ import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage
 /**
  * function list contonerl front page show
  */
-@Form.create()
 class FunctionList extends ListPage {
     constructor(props) {
         super(props, {

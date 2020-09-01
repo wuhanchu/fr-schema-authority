@@ -15,8 +15,9 @@ const config = SETTING
 /**
  * 注册信息界面
  */
-@Form.create()
 class License extends PureComponent {
+    formRef = React.createRef();
+
     state = {
         loading: true, // 是否加载中
         data: null // 证书数据
@@ -86,7 +87,7 @@ class License extends PureComponent {
                                         action={actions.show}
                                         values={data}
                                         schema={schema}
-                                        form={this.props.form}
+                                        form={this.formRef}
                                     />
                                 </Col>
                             </Row>

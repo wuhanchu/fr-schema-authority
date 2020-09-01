@@ -1,7 +1,7 @@
-import { Alert } from "antd"
-import { formatMessage, FormattedMessage } from "umi"
-import React, { Component } from "react"
-import { connect } from "dva"
+import {Alert} from "antd"
+import {formatMessage, FormattedMessage, injectIntl} from "umi"
+import React, {Component} from "react"
+import {connect} from "dva"
 import LoginComponents from "./components/Login"
 import styles from "./Login.less"
 import LicenseUpload from "@/pages/authority/permission/license/LicenseUpload"
@@ -24,16 +24,13 @@ class Login extends Component {
             autoLogin: e.target.checked,
         })
     }
-    handleSubmit = (err, values) => {
-        const { type } = this.state
-
-        if (!err) {
-            const { dispatch } = this.props
-            dispatch({
-                type: "login/login",
-                payload: { ...values, type },
-            })
-        }
+    handleSubmit = (values) => {
+        const {type} = this.state
+        const {dispatch} = this.props
+        dispatch({
+            type: "login/login",
+            payload: {...values, type},
+        })
     }
     onTabChange = (type) => {
         this.setState({
@@ -46,27 +43,23 @@ class Login extends Component {
                 return
             }
 
-            this.loginForm.validateFields(
-                ["mobile"],
-                {},
-                async (err, values) => {
-                    if (err) {
-                        reject(err)
-                    } else {
-                        const { dispatch } = this.props
-
-                        try {
-                            const success = await dispatch({
-                                type: "login/getCaptcha",
-                                payload: values.mobile,
-                            })
-                            resolve(!!success)
-                        } catch (error) {
-                            reject(error)
-                        }
+            this.formRef.current
+                .validateFields()
+                .then(async values => {
+                    const {dispatch} = this.props
+                    try {
+                        const success = await dispatch({
+                            type: "login/getCaptcha",
+                            payload: values.mobile,
+                        })
+                        resolve(!!success)
+                    } catch (error) {
+                        reject(error)
                     }
-                }
-            )
+                })
+                .catch(err => {
+                    console.log("err", err)
+                })
         })
     renderMessage = (content) => (
         <Alert
@@ -111,13 +104,13 @@ class Login extends Component {
                     <div className={styles.other}>
                         <UserName
                             name="userName"
-                            placeholder={`${formatMessage({
+                            placeholder={`${this.props.intl.formatMessage({
                                 id: "user-login.login.userName",
                             })}`}
                             rules={[
                                 {
                                     required: true,
-                                    message: formatMessage({
+                                    message: this.props.intl.formatMessage({
                                         id: "user-login.userName.required",
                                     }),
                                 },
@@ -125,13 +118,13 @@ class Login extends Component {
                         />
                         <Password
                             name="password"
-                            placeholder={`${formatMessage({
+                            placeholder={`${this.props.intl.formatMessage({
                                 id: "user-login.login.password",
                             })}`}
                             rules={[
                                 {
                                     required: true,
-                                    message: formatMessage({
+                                    message: this.props.intl.formatMessage({
                                         id: "user-login.password.required",
                                     }),
                                 },
@@ -140,9 +133,14 @@ class Login extends Component {
                                 e.preventDefault()
 
                                 if (this.loginForm) {
-                                    this.loginForm.validateFields(
-                                        this.handleSubmit
-                                    )
+                                    this.loginForm.current
+                                        .validateFields()
+                                        .then(async fieldsValue => {
+                                            this.handleSubmit(fieldsValue)
+                                        })
+                                        .catch(err => {
+                                            console.log("err", err)
+                                        })
                                 }
                             }}
                         />
@@ -166,4 +164,4 @@ class Login extends Component {
     }
 }
 
-export default Login
+export default injectIntl(Login)

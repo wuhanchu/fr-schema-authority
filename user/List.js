@@ -3,14 +3,12 @@ import frSchema from '@/outter/fr-schema/src';
 import schema from './schema';
 import service from './service';
 import { Fragment } from 'react';
-import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Divider, message, Popconfirm, Select } from 'antd';
 import InfoModal from '@/outter/fr-schema-antd-utils/src/components/Page/InfoModal';
 import Authorized from '@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized';
 import roleservice from '../role/service';
 import clone from 'clone';
-
 import departmentService from '../department/service';
 import ListPage from '@/outter/fr-schema-antd-utils/src/components/Page/ListPage';
 
@@ -194,4 +192,4 @@ export class User extends ListPage {
     }
 }
 
-export default Form.create()(User);
+export default (User);

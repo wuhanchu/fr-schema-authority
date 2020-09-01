@@ -10,7 +10,6 @@ import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage
 /**
  * 通话记录
  */
-@Form.create()
 class List extends ListPage {
     constructor(props) {
         super(props, {

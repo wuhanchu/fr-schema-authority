@@ -11,7 +11,6 @@ import actions from '@/outter/fr-schema/src/actions';
  * handleAdd 提交后回调
  * onCancel 取消时回调
  */
-@Form.create()
 class LicenseUpload extends PureComponent {
     state = {
         loading: true,
@@ -49,7 +48,6 @@ class LicenseUpload extends PureComponent {
 
     render() {
         const { data, loading } = this.state;
-        const { form } = this.props;
         return loading? (
             <Modal visible={true} footer={null} title={'机器码获取'}>
                 <Spin/>
@@ -58,7 +56,6 @@ class LicenseUpload extends PureComponent {
             <InfoModal
                 title="证书提交"
                 visible={true}
-                form={form}
                 schema={this.getSchema()}
                 action={actions.edit}
                 values={data}
