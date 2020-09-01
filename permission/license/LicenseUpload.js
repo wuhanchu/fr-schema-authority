@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
-import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { message, Modal, Spin } from 'antd';
 import service from './service';
 import schema from './schema';
-import InfoModal from '@/outter/fr-schema-antd-utils/src/components/Page/InfoModal';
+import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
 import actions from '@/outter/fr-schema/src/actions';
+
+const { InfoModal } = frSchemaUtils.components;
 
 /**
  * handleAdd 提交后回调

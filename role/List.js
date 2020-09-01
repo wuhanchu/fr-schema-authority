@@ -5,10 +5,10 @@ import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Divider, message, Modal, Popconfirm } from 'antd';
 import { Fragment } from 'react';
-import Authorized from '@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized';
+import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
+const { Authorized } = frSchemaUtils.components;
 import FunctionTree from '../permission/components/FunctionTree';
-import ListPage from '@/outter/fr-schema-antd-utils/src/components/Page/ListPage';
-
+const { ListPage } = frSchemaUtils.components;
 const { actions } = frSchema;
 
 /**

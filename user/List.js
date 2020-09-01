@@ -5,13 +5,13 @@ import service from './service';
 import { Fragment } from 'react';
 import '@ant-design/compatible/assets/index.css';
 import { Divider, message, Popconfirm, Select } from 'antd';
-import InfoModal from '@/outter/fr-schema-antd-utils/src/components/Page/InfoModal';
-import Authorized from '@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized';
+import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
+const { InfoModal } = frSchemaUtils.components;
+const { Authorized } = frSchemaUtils.components;
 import roleservice from '../role/service';
 import clone from 'clone';
 import departmentService from '../department/service';
-import ListPage from '@/outter/fr-schema-antd-utils/src/components/Page/ListPage';
-
+const { ListPage } = frSchemaUtils.components;
 const { utils, actions } = frSchema;
 
 const { Option } = Select;

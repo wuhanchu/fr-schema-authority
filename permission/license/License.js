@@ -2,14 +2,15 @@ import React, { Fragment, PureComponent } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Card, Col, Divider, Row, Skeleton } from 'antd';
-import InfoForm from '@/outter/fr-schema-antd-utils/src/components/Page/InfoForm';
 import { PageHeaderWrapper } from "@ant-design/pro-layout"
 import LicenseUpload from '@/pages/authority/permission/license/LicenseUpload';
 import service from './service';
 import schema from './schema';
 
 import actions from '@/outter/fr-schema/src/actions';
+import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
 
+const {InfoForm} = frSchemaUtils
 const config = SETTING
 
 /**

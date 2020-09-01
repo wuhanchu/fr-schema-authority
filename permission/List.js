@@ -4,9 +4,10 @@ import { Form } from "@ant-design/compatible"
 import "@ant-design/compatible/assets/index.css"
 
 import { Fragment } from "react"
-import Authorized from "@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized"
-import ListPage from "@/outter/fr-schema-antd-utils/src/components/Page/ListPage"
-
+import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
+const { Authorized } = frSchemaUtils.components;
+import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
+const { ListPage } = frSchemaUtils.components;
 /**
  * 通话记录
  */
