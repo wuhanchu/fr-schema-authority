@@ -3,12 +3,17 @@ import service from "./service"
 import "@ant-design/compatible/assets/index.css"
 import clone from "clone"
 import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
+
 const { ListPage } = frSchemaUtils.components;
+
 export class List extends ListPage {
     constructor(props) {
         super(props, {
             schema: clone(schema),
             authorityKey: "department",
+            queryArgs: {
+                pageSize: 9999,
+            },
             infoProps: {
                 offline: true,
             },
@@ -21,7 +26,7 @@ export class List extends ListPage {
         // 遍历数据并标记父子关系
         for (let i = 0; i < list.length; i++) {
             list[i].tier = list[i].key.split('_').length;
-            list[i].tierKey = list[i].key.includes('_') ? list[i].key.slice(0, list[i].key.lastIndexOf('_')) : '_';
+            list[i].tierKey = list[i].key.includes('_')? list[i].key.slice(0, list[i].key.lastIndexOf('_')) : '_';
         }
         // 数据根据层级排序(倒序)
         list.sort(this.sortData);
