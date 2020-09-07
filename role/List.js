@@ -5,10 +5,13 @@ import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Divider, message, Modal, Popconfirm } from 'antd';
 import { Fragment } from 'react';
-import Authorized from '@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized';
-import FunctionTree from '../permission/components/FunctionTree';
-import ListPage from '@/outter/fr-schema-antd-utils/src/components/Page/ListPage';
 
+import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
+
+const { Authorized } = frSchemaUtils.components;
+import FunctionTree from '../permission/components/FunctionTree';
+
+const { ListPage } = frSchemaUtils.components;
 const { actions } = frSchema;
 
 /**
@@ -69,10 +72,6 @@ class Role extends ListPage {
                                     <Popconfirm
                                         title="是否要删除此行？"
                                         onConfirm={async (e) => {
-                                            await this.service.putFunctions({
-                                                role_id: record.id,
-                                                role_permission_group_ids: [],
-                                            });
                                             this.handleDelete(record);
                                             e.stopPropagation();
                                         }}

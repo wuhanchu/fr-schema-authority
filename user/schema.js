@@ -7,10 +7,12 @@ export default {
         title: "用户名",
         required: true,
         readOnly: true,
+        searchPrefix: "like"
     },
     name: {
         title: "姓名",
         required: true,
+        searchPrefix: "like"
     },
     password: {
         title: "密码",

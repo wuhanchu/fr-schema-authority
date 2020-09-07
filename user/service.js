@@ -8,6 +8,7 @@ const { request } = utils
 
 // 用户
 let service = createApi("user_auth/user", schema, {}, "eq.")
+service.get = createApi("user_auth/user_extend", schema, {}, "eq.").get
 
 const convertRole = (item) => {
     return {

@@ -6,6 +6,7 @@ export default {
     name: {
         title: "名称",
         required: true,
+        searchPrefix: "like",
     },
     key: {
         title: "编号",
