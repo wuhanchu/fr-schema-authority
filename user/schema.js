@@ -39,7 +39,7 @@ export default {
             return dict.role
         },
     },
-    telephone: {
+    mobile_phone: {
         title: "电话",
     },
     email: {
