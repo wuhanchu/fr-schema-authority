@@ -2,21 +2,23 @@ import React, { Fragment, PureComponent } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Button, Card, Col, Divider, Row, Skeleton } from 'antd';
-import InfoForm from '@/outter/fr-schema-antd-utils/src/components/Page/InfoForm';
 import { PageHeaderWrapper } from "@ant-design/pro-layout"
 import LicenseUpload from '@/pages/authority/permission/license/LicenseUpload';
 import service from './service';
 import schema from './schema';
 
 import actions from '@/outter/fr-schema/src/actions';
+import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
 
+const {InfoForm} = frSchemaUtils
 const config = SETTING
 
 /**
  * 注册信息界面
  */
-@Form.create()
 class License extends PureComponent {
+    formRef = React.createRef();
+
     state = {
         loading: true, // 是否加载中
         data: null // 证书数据
@@ -86,7 +88,7 @@ class License extends PureComponent {
                                         action={actions.show}
                                         values={data}
                                         schema={schema}
-                                        form={this.props.form}
+                                        form={this.formRef}
                                     />
                                 </Col>
                             </Row>

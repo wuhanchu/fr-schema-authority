@@ -1,6 +1,6 @@
 import schema from "./schema"
 
-import frSchema from "@/outter/fr-schema/src"
+import frSchema, { config } from "@/outter/fr-schema/src"
 
 const { createApi, createBasicApi, oauth, utils } = frSchema
 
@@ -29,6 +29,18 @@ service.login = (params) => {
         .catch((e) => {
             throw new Error("登录出错")
         })
+}
+
+service.logout = () => {
+    return request(
+        {
+            method: "DELETE",
+            url: (
+                "/" +
+                config.apiVersion + "token"
+            ).replace("//", "/"),
+        }
+    )
 }
 
 /**

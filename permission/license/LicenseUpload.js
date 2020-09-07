@@ -1,17 +1,17 @@
 import React, { PureComponent } from 'react';
-import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { message, Modal, Spin } from 'antd';
 import service from './service';
 import schema from './schema';
-import InfoModal from '@/outter/fr-schema-antd-utils/src/components/Page/InfoModal';
+import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
 import actions from '@/outter/fr-schema/src/actions';
+
+const { InfoModal } = frSchemaUtils.components;
 
 /**
  * handleAdd 提交后回调
  * onCancel 取消时回调
  */
-@Form.create()
 class LicenseUpload extends PureComponent {
     state = {
         loading: true,
@@ -49,7 +49,6 @@ class LicenseUpload extends PureComponent {
 
     render() {
         const { data, loading } = this.state;
-        const { form } = this.props;
         return loading? (
             <Modal visible={true} footer={null} title={'机器码获取'}>
                 <Spin/>
@@ -58,7 +57,6 @@ class LicenseUpload extends PureComponent {
             <InfoModal
                 title="证书提交"
                 visible={true}
-                form={form}
                 schema={this.getSchema()}
                 action={actions.edit}
                 values={data}

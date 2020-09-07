@@ -18,7 +18,6 @@ const { actions } = frSchema;
  * 通话记录
  */
 
-@Form.create()
 class Role extends ListPage {
     constructor(props) {
         super(props, {

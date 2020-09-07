@@ -3,17 +3,17 @@ import frSchema from '@/outter/fr-schema/src';
 import schema from './schema';
 import service from './service';
 import { Fragment } from 'react';
-import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Divider, message, Popconfirm, Select } from 'antd';
-import InfoModal from '@/outter/fr-schema-antd-utils/src/components/Page/InfoModal';
-import Authorized from '@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized';
+import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
+
+const { InfoModal } = frSchemaUtils.components;
+const { Authorized } = frSchemaUtils.components;
 import roleservice from '../role/service';
 import clone from 'clone';
-
 import departmentService from '../department/service';
-import ListPage from '@/outter/fr-schema-antd-utils/src/components/Page/ListPage';
 
+const { ListPage } = frSchemaUtils.components;
 const { utils, actions } = frSchema;
 
 const { Option } = Select;
@@ -61,14 +61,14 @@ export class User extends ListPage {
     };
 
     handleGetDepartmentList = async () => {
-        const response = await departmentService.get();
+        const response = await departmentService.get({ pageSize: 9999 });
         let data = utils.dict.listToDict(response.list, null, 'key', 'name');
 
         this.schema.department_key.dict = data;
     };
 
     handleGetRoleList = async () => {
-        const roleList = await roleservice.get();
+        const roleList = await roleservice.get({ pageSize: 9999 });
         let data = utils.dict.listToDict(roleList.list, null, 'id', 'chinese_name');
         this.schema.roles.dict = data;
         this.setState({
@@ -194,4 +194,4 @@ export class User extends ListPage {
     }
 }
 
-export default Form.create()(User);
+export default (User);

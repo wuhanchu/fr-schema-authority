@@ -5,6 +5,18 @@ import { reloadAuthorized } from "@/outter/fr-schema-antd-utils/src/utils/Author
 import { setAuthority } from "@/outter/fr-schema-antd-utils/src/utils/authority"
 import { getPageQuery } from "@/outter/fr-schema-antd-utils/src/utils/utils"
 
+function deleteAllCookies() {
+    let cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+        let cookie = cookies[i];
+        let eqPos = cookie.indexOf("=");
+        let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        document.execCommand("ClearAuthenticationCache");
+    }
+}
+
 export default {
     namespace: "login",
 
@@ -13,7 +25,7 @@ export default {
     },
 
     effects: {
-        *login({ payload }, { call, put, take }) {
+        * login({ payload }, { call, put, take }) {
             localStorage.clear()
             sessionStorage.clear()
 
@@ -42,7 +54,14 @@ export default {
             }
         },
 
-        *logout(_, { put }) {
+        * logout(_, { put, call }) {
+            console.info("logout")
+
+            // 清理数据
+            localStorage.clear()
+            sessionStorage.clear()
+            deleteAllCookies()
+
             yield put({
                 type: "changeLoginStatus",
                 payload: {
@@ -52,21 +71,26 @@ export default {
             })
             reloadAuthorized()
 
+            // 返回登录
             const { redirect } = getPageQuery() // redirect
-
-            localStorage.clear()
-            sessionStorage.clear()
 
             if (
                 !window.location.pathname.endsWith("/user/login") &&
                 !redirect
             ) {
-                history.replace({
-                    pathname: "/user/login",
-                    search: stringify({
-                        redirect: window.location.href,
-                    }),
-                })
+                if (SETTING.loginPath) {
+                    location.href = SETTING.loginPath + "?" + SETTING.redirectName + "=" + window.location.href
+                } else {
+                    history.replace({
+                        pathname: "/user/login",
+                        search: stringify({
+                            redirect: window.location.href,
+                        }),
+                    })
+                }
+
+                yield call(service.logout)
+
             }
         },
     },

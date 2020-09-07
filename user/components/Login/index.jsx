@@ -1,6 +1,5 @@
-import { Form } from "@ant-design/compatible"
 import "@ant-design/compatible/assets/index.css"
-import { Tabs } from "antd"
+import { Tabs,Form } from "antd"
 import React, { Component } from "react"
 import classNames from "classnames"
 import LoginContext from "./LoginContext"
@@ -19,6 +18,8 @@ class Login extends Component {
         onSubmit: () => {},
     }
 
+    formRef = React.createRef();
+
     constructor(props) {
         super(props)
         this.state = {
@@ -29,10 +30,10 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        const { form, onCreate } = this.props
+        const { onCreate } = this.props
 
         if (onCreate) {
-            onCreate(form)
+            onCreate(this.formRef)
         }
     }
 
@@ -51,7 +52,6 @@ class Login extends Component {
         )
     }
     getContext = () => {
-        const { form } = this.props
         const { tabs = [] } = this.state
         return {
             tabUtil: {
@@ -66,7 +66,7 @@ class Login extends Component {
                     })
                 },
             },
-            form: { ...form },
+            form: this.formRef,
             updateActive: (activeItem) => {
                 const { type = "", active = {} } = this.state
 
@@ -83,23 +83,21 @@ class Login extends Component {
         }
     }
     handleSubmit = (e) => {
-        e.preventDefault()
         const { active = {}, type = "" } = this.state
-        const { form, onSubmit } = this.props
+        const { onSubmit } = this.props
         const activeFields = active[type] || []
 
-        if (form) {
-            form.validateFields(
-                activeFields,
-                {
-                    force: true,
-                },
-                (err, values) => {
+        if (this.formRef) {
+            this.formRef.current
+                .validateFields()
+                .then(async fieldsValue => {
                     if (onSubmit) {
-                        onSubmit(err, values)
+                        onSubmit(fieldsValue)
                     }
-                }
-            )
+                })
+                .catch(err => {
+                    console.log("err", err)
+                })
         }
     }
 
@@ -122,7 +120,7 @@ class Login extends Component {
         return (
             <LoginContext.Provider value={this.getContext()}>
                 <div className={classNames(className, styles.login)}>
-                    <Form onSubmit={this.handleSubmit}>
+                    <Form onFinish={this.handleSubmit} ref={this.formRef}>
                         {tabs.length ? (
                             <React.Fragment>
                                 <Tabs
@@ -148,4 +146,4 @@ class Login extends Component {
 Object.keys(LoginItem).forEach((item) => {
     Login[item] = LoginItem[item]
 })
-export default Form.create()(Login)
+export default (Login)

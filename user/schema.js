@@ -21,10 +21,6 @@ export default {
         editHide: true,
         type: schemaFieldType.Password,
     },
-    address: {
-        title: "地址",
-        // addHide: true
-    },
     department_key: {
         title: "部门",
         type: schemaFieldType.Select,
@@ -45,5 +41,12 @@ export default {
     },
     telephone: {
         title: "电话",
+    },
+    email: {
+        title: "邮件",
+    },
+    address: {
+        title: "地址",
+        listHide: true
     },
 }
