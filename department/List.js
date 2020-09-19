@@ -9,6 +9,8 @@ const { ListPage } = frSchemaUtils.components;
 export class List extends ListPage {
     constructor(props) {
         super(props, {
+            readOnly: true,
+            addHide: true,
             schema: clone(schema),
             authorityKey: "department",
             queryArgs: {

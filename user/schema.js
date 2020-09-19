@@ -14,6 +14,12 @@ export default {
         required: true,
         searchPrefix: "like"
     },
+    enable: {
+        sorter: true,
+        title: "是否启用",
+        type: schemaFieldType.Select,
+        dict: frSchema.dict.yesOrNo
+    },
     password: {
         title: "密码",
         required: true,
@@ -23,13 +29,15 @@ export default {
     },
     department_key: {
         title: "部门",
+        sorter: true,
+        searchPrefix: "cs",
         type: schemaFieldType.Select,
         props: {
             mode: "multiple",
         },
-        // addHide: true
     },
     roles: {
+        sorter: true,
         title: "角色",
         addHide: true,
         infoHide: true,

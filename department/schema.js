@@ -8,8 +8,5 @@ export default {
         required: true,
         searchPrefix: "like",
     },
-    key: {
-        title: "编号",
-        required: true,
-    },
+
 }

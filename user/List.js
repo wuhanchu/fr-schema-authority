@@ -2,16 +2,15 @@ import frSchema from '@/outter/fr-schema/src';
 
 import schema from './schema';
 import service from './service';
-import { Fragment } from 'react';
 import '@ant-design/compatible/assets/index.css';
-import { Divider, message, Popconfirm, Select } from 'antd';
+import { Button, message, Select } from 'antd';
 import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
-
-const { InfoModal } = frSchemaUtils.components;
-const { Authorized } = frSchemaUtils.components;
 import roleservice from '../role/service';
 import clone from 'clone';
 import departmentService from '../department/service';
+
+const { InfoModal } = frSchemaUtils.components;
+const { Authorized } = frSchemaUtils.components;
 
 const { ListPage } = frSchemaUtils.components;
 const { utils, actions } = frSchema;
@@ -25,6 +24,8 @@ export class User extends ListPage {
     constructor(props) {
         super(props, {
             schema: clone(schema),
+            addHide: true,
+            showSelect: true,
             authorityKey: 'user',
             infoProps: {
                 offline: true,
@@ -53,7 +54,10 @@ export class User extends ListPage {
         for (let i = 0; i < data.roles.length; i++) {
             rolelist.push(this.state.roleList[data.roles[i]].id);
         }
-        await this.service.editRole({ id: data.id, role_ids: rolelist });
+        await this.service.editRole({
+            id: data.id || this.state.selectedRows.map(item => item.id),
+            role_ids: rolelist
+        });
         // 更新
         this.refreshList();
         message.success('修改成功');
@@ -86,55 +90,43 @@ export class User extends ListPage {
                 fixed: scroll && 'right',
                 render: (text, record) =>
                     record.name != 'admin' && (
-                        <Fragment>
-                            {showEdit && (
-                                <Authorized
-                                    authority={this.meta.authority && this.meta.authority.update}
-                                    noMatch={null}
-                                >
-                                    <a onClick={() => this.handleVisibleModal(true, record, actions.edit)}>修改</a>
-                                </Authorized>
-                            )}
-                            {showDelete && (
-                                <Authorized
-                                    authority={this.meta.authority && this.meta.authority.delete}
-                                    noMatch={null}
-                                >
-                                    <Divider type="vertical"/>
-                                    <Popconfirm
-                                        title="删除用户会影响相关数据的显示，确认删除？"
-                                        onConfirm={(e) => {
-                                            this.handleDelete(record);
-                                            e.stopPropagation();
-                                        }}
-                                    >
-                                        <a>删除</a>
-                                    </Popconfirm>
-                                </Authorized>
-                            )}
-
-                            {this.renderOperateColumnExtend(record)}
-                        </Fragment>
+                        <Authorized authority={'user_role_put'} noMatch={null}>
+                            <a
+                                onClick={() => {
+                                    this.setState({ editRoleVisible: true, record: record });
+                                }}
+                            >
+                                分配角色
+                            </a>
+                        </Authorized>
                     ),
             }
         );
     }
 
-    // 扩展栏拨号按钮
-    renderOperateColumnExtend(record) {
-        if (record.name == 'admin') return null;
+    renderOperationButtons() {
+        return <Button
+            type="primary"
+            onClick={async () => {
+                await this.service.sync()
+                message.info("任务已创建，请等待几分钟以后,刷新数据")
+            }}
+        >
+            同步数据
+        </Button>
+
+    }
+
+    renderOperationMulit() {
         return (
-            <Authorized authority={'user_role_put'} noMatch={null}>
-                <Divider type="vertical"/>
-                <a
-                    onClick={() => {
-                        this.setState({ editRoleVisible: true, record: record });
-                    }}
-                >
-                    分配角色
-                </a>
-            </Authorized>
-        );
+            <span>
+                <Button onClick={(e) => {
+                    this.setState({
+                        editRoleVisible: true
+                    })
+                }}>批量分配角色</Button>
+            </span>
+        )
     }
 
     renderExtend() {
@@ -147,11 +139,34 @@ export class User extends ListPage {
         };
         const { id, name, roles } = this.schema;
 
+        let schema = {
+            id: {
+                ...id,
+                title: 'id',
+                editHide: true,
+                readOnly: true,
+            },
+            name: {
+                ...name,
+                required: false,
+                readOnly: true,
+            },
+            roles: {
+                ...roles,
+                dict: this.state.roleList,
+                required: true,
+                editHide: false,
+                infoHide: false,
+            },
+        }
+        if (!record) {
+            delete schema.name
+        }
+
         return (
             editRoleVisible && (
                 <InfoModal
                     renderForm={renderForm}
-                    // form={this.props.from}
                     title={'用户角色分配'}
                     action={frSchema.actions.edit}
                     resource={resource}
@@ -160,27 +175,7 @@ export class User extends ListPage {
                     visible={editRoleVisible}
                     addArgs={addArgs}
                     meta={this.meta}
-                    schema={{
-                        id: {
-                            ...id,
-                            title: 'id',
-                            editHide: true,
-                            readOnly: true,
-                        },
-                        name: {
-                            ...name,
-                            required: false,
-                            // editHide: true,
-                            readOnly: true,
-                        },
-                        roles: {
-                            ...roles,
-                            dict: this.state.roleList,
-                            required: true,
-                            editHide: false,
-                            infoHide: false,
-                        },
-                    }}
+                    schema={schema}
                 />
             )
         );
@@ -188,8 +183,8 @@ export class User extends ListPage {
 
     // 搜索
     renderSearchBar() {
-        const { name } = this.schema;
-        const filters = this.createFilters({ name }, 5);
+        const { name, department_key } = this.schema;
+        const filters = this.createFilters({ name, department_key }, 4);
         return this.createSearchBar(filters);
     }
 }

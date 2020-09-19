@@ -9,6 +9,7 @@ const { request } = utils
 // 用户
 let service = createApi("user_auth/user", schema, {}, "eq.")
 service.get = createApi("user_auth/user_extend", schema, {}, "eq.").get
+service.sync = createApi("user_auth/phfund/user/sync").post
 
 const convertRole = (item) => {
     return {
@@ -49,7 +50,6 @@ service.logout = () => {
  */
 service.queryCurrent = async () => {
     const response = await createBasicApi("user_auth/user/current").get()
-
     return response
 }
 
@@ -70,8 +70,8 @@ service.queryRoleList = async (params) => {
 }
 
 service.editRole = async (params) => {
-    const res = await createApi(`user_auth/user/role`).put(params)
-    return res
+    console.debug("user editRole params", params)
+    return await createApi(`user_auth/user/role`).put(params)
 }
 
 export default service
