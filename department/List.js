@@ -41,7 +41,11 @@ export class List extends ListPage {
             let item = list.find(value => {
                 return value.key === list[i].tierKey
             })
+            // 找不到父节点则将当前节点作为顶级节点
             if (!item) {
+                list[i].tier = 1;
+                list[i].tierKey = list[i].key
+                results.push(list[i])
                 continue
             }
             if (!item.children) {
