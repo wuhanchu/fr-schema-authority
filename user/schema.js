@@ -31,10 +31,7 @@ export default {
         title: "部门",
         sorter: true,
         searchPrefix: "cs",
-        type: schemaFieldType.Select,
-        props: {
-            mode: "multiple",
-        },
+        type: schemaFieldType.MultiSelect
     },
     roles: {
         sorter: true,
