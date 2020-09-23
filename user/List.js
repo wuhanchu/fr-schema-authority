@@ -37,6 +37,7 @@ export class User extends ListPage {
     componentDidMount = async () => {
         await this.handleGetRoleList();
         await this.handleGetDepartmentList();
+        this.setState({ init: true })
         super.componentDidMount();
     };
 
@@ -183,6 +184,9 @@ export class User extends ListPage {
 
     // 搜索
     renderSearchBar() {
+        if (!this.state.init) {
+            return null
+        }
         const { name, department_key } = this.schema;
         const filters = this.createFilters({ name, department_key }, 4);
         return this.createSearchBar(filters);
