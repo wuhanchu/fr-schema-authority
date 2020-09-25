@@ -63,6 +63,7 @@ export class List extends ListPage {
         // 只保留顶级
         results.map((item) => (item.tier === 1 && res.push(item)))
         data.list = res;
+        data.pagination = {...data.pagination, total: res.length}
         return data
     }
 
