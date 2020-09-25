@@ -37,9 +37,9 @@ export class List extends ListPage {
         // 数据转换成table所需
         for (let i = 0; i < list.length; i++) {
             // 顶级不需要处理
-            if (list[i].tier === 1) {
-                continue
-            }
+            // if (list[i].tier === 1) {
+            //     continue
+            // }
             // 查找当前项的父级
             let item = list.find(value => {
                 return value.key === list[i].tierKey
