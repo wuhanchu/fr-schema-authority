@@ -15,7 +15,7 @@ export class List extends ListPage {
             authorityKey: "department",
             queryArgs: {
                 pageSize: 9999,
-                order: "order_no.desc"
+                order: "order_no.asc"
             },
             infoProps: {
                 offline: true,
