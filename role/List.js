@@ -1,15 +1,14 @@
 import frSchema from '@/outter/fr-schema/src';
 import schema from './schema';
 import service from './service';
-import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import { Divider, message, Modal, Popconfirm } from 'antd';
 import { Fragment } from 'react';
 
 import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
+import FunctionTree from '../permission/components/FunctionTree';
 
 const { Authorized } = frSchemaUtils.components;
-import FunctionTree from '../permission/components/FunctionTree';
 
 const { ListPage } = frSchemaUtils.components;
 const { actions } = frSchema;
@@ -59,7 +58,13 @@ class Role extends ListPage {
                                     authority={this.meta.authority && this.meta.authority.update}
                                     noMatch={null}
                                 >
-                                    <a onClick={() => this.handleVisibleModal(true, record, actions.edit)}>修改</a>
+                                    <a
+                                        onClick={() =>
+                                            this.handleVisibleModal(true, record, actions.edit)
+                                        }
+                                    >
+                                        修改
+                                    </a>
                                 </Authorized>
                             )}
                             {showDelete && (
@@ -67,7 +72,7 @@ class Role extends ListPage {
                                     authority={this.meta.authority && this.meta.authority.delete}
                                     noMatch={null}
                                 >
-                                    <Divider type="vertical"/>
+                                    <Divider type="vertical" />
                                     <Popconfirm
                                         title="是否要删除此行？"
                                         onConfirm={async (e) => {
@@ -120,7 +125,7 @@ class Role extends ListPage {
         return (
             <Fragment>
                 <Authorized authority={'role_permission_put'} noMatch={null}>
-                    <Divider type="vertical"/>
+                    <Divider type="vertical" />
                     <a
                         onClick={() => {
                             this.handleSetPermission(record);
@@ -130,7 +135,7 @@ class Role extends ListPage {
                     </a>
                 </Authorized>
                 <Authorized authority={'role_permission_scope_put'}>
-                    <Divider type="vertical"/>
+                    <Divider type="vertical" />
                     <a
                         onClick={() => {
                             this.handleSetPermission(record);

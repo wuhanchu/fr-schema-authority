@@ -2,20 +2,21 @@ import frSchema from '@/outter/fr-schema/src';
 
 import schema from './schema';
 import service from './service';
+import { Fragment } from 'react';
 import '@ant-design/compatible/assets/index.css';
-import { Button, message, Select } from 'antd';
 import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
-import roleservice from '../role/service';
+
+import { Divider, message, Popconfirm, Button } from 'antd';
+import roleService from '../role/service';
 import clone from 'clone';
+
 import departmentService from '../department/service';
 
-const { InfoModal } = frSchemaUtils.components;
 const { Authorized } = frSchemaUtils.components;
+const { InfoModal } = frSchemaUtils.components;
 
 const { ListPage } = frSchemaUtils.components;
 const { utils, actions } = frSchema;
-
-const { Option } = Select;
 
 /**
  * 通话记录
@@ -24,7 +25,6 @@ export class User extends ListPage {
     constructor(props) {
         super(props, {
             schema: clone(schema),
-            addHide: true,
             showSelect: true,
             authorityKey: 'user',
             infoProps: {
@@ -37,7 +37,7 @@ export class User extends ListPage {
     componentDidMount = async () => {
         await this.handleGetRoleList();
         await this.handleGetDepartmentList();
-        this.setState({ init: true })
+        this.setState({ init: true });
         super.componentDidMount();
     };
 
@@ -56,8 +56,8 @@ export class User extends ListPage {
             rolelist.push(this.state.roleList[data.roles[i]].id);
         }
         await this.service.editRole({
-            id: data.id || this.state.selectedRows.map(item => item.id),
-            role_ids: rolelist
+            id: data.id || this.state.selectedRows.map((item) => item.id),
+            role_ids: rolelist,
         });
         // 更新
         this.refreshList();
@@ -73,7 +73,7 @@ export class User extends ListPage {
     };
 
     handleGetRoleList = async () => {
-        const roleList = await roleservice.get({ pageSize: 9999 });
+        const roleList = await roleService.get({ pageSize: 9999 });
         let data = utils.dict.listToDict(roleList.list, null, 'id', 'chinese_name');
         this.schema.roles.dict = data;
         this.setState({
@@ -91,43 +91,69 @@ export class User extends ListPage {
                 fixed: scroll && 'right',
                 render: (text, record) =>
                     record.name != 'admin' && (
-                        <Authorized authority={'user_role_put'} noMatch={null}>
-                            <a
-                                onClick={() => {
-                                    this.setState({ editRoleVisible: true, record: record });
-                                }}
-                            >
-                                分配角色
-                            </a>
-                        </Authorized>
+                        <Fragment>
+                            {showEdit && (
+                                <Authorized
+                                    authority={this.meta.authority && this.meta.authority.update}
+                                    noMatch={null}
+                                >
+                                    <a
+                                        onClick={() =>
+                                            this.handleVisibleModal(true, record, actions.edit)
+                                        }
+                                    >
+                                        修改
+                                    </a>
+                                </Authorized>
+                            )}
+                            {showDelete && (
+                                <Authorized
+                                    authority={this.meta.authority && this.meta.authority.delete}
+                                    noMatch={null}
+                                >
+                                    <Divider type="vertical" />
+                                    <Popconfirm
+                                        title="删除用户会影响相关数据的显示，确认删除？"
+                                        onConfirm={(e) => {
+                                            this.handleDelete(record);
+                                            e.stopPropagation();
+                                        }}
+                                    >
+                                        <a>删除</a>
+                                    </Popconfirm>
+                                </Authorized>
+                            )}
+                            <Authorized authority={'user_role_put'} noMatch={null}>
+                                <Divider type="vertical" />
+                                <a
+                                    onClick={() => {
+                                        this.setState({ editRoleVisible: true, record: record });
+                                    }}
+                                >
+                                    分配角色
+                                </a>
+                            </Authorized>
+                            {this.renderOperateColumnExtend(record)}
+                        </Fragment>
                     ),
             }
         );
     }
 
-    renderOperationButtons() {
-        return <Button
-            type="primary"
-            onClick={async () => {
-                await this.service.sync()
-                message.info("任务已创建，请等待几分钟以后,刷新数据")
-            }}
-        >
-            同步数据
-        </Button>
-
-    }
-
     renderOperationMulit() {
         return (
             <span>
-                <Button onClick={(e) => {
-                    this.setState({
-                        editRoleVisible: true
-                    })
-                }}>批量分配角色</Button>
+                <Button
+                    onClick={(e) => {
+                        this.setState({
+                            editRoleVisible: true,
+                        });
+                    }}
+                >
+                    批量分配角色
+                </Button>
             </span>
-        )
+        );
     }
 
     renderExtend() {
@@ -159,9 +185,9 @@ export class User extends ListPage {
                 editHide: false,
                 infoHide: false,
             },
-        }
+        };
         if (!record) {
-            delete schema.name
+            delete schema.name;
         }
 
         return (
@@ -182,10 +208,41 @@ export class User extends ListPage {
         );
     }
 
+    /**
+     * 处理数据新增
+     * @param data
+     * @returns {Promise<void>}
+     */
+    async handleAdd(data, schema) {
+        // 更新
+        let response;
+        if (!this.props.offline) {
+            try {
+                response = await this.service.post(data, schema);
+                message.success('添加成功');
+            } catch (error) {
+                message.error(error.message);
+            }
+        } else {
+            // 修改当前数据
+            this.state.data.list.push(decorateItem(data, this.schema));
+            this.setState({
+                data: this.state.data,
+            });
+        }
+
+        this.refreshList();
+        this.handleVisibleModal();
+        this.handleChangeCallback && this.handleChangeCallback();
+        this.props.handleChangeCallback && this.props.handleChangeCallback();
+
+        return response;
+    }
+
     // 搜索
     renderSearchBar() {
         if (!this.state.init) {
-            return null
+            return null;
         }
         const { name, department_key } = this.schema;
         const filters = this.createFilters({ name, department_key }, 4);
@@ -193,4 +250,4 @@ export class User extends ListPage {
     }
 }
 
-export default (User);
+export default User;

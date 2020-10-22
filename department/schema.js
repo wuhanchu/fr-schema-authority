@@ -1,12 +1,15 @@
-import frSchema from "@/outter/fr-schema/src"
+import frSchema from '@/outter/fr-schema/src';
 
-const { schemaFieldType } = frSchema
+const { schemaFieldType } = frSchema;
 
 export default {
-    name: {
-        title: "名称",
-        required: true,
-        searchPrefix: "like",
-    },
-
-}
+  name: {
+    title: '名称',
+    required: true,
+    searchPrefix: 'like',
+  },
+  key: {
+    title: '编号',
+    required: true,
+  },
+};
