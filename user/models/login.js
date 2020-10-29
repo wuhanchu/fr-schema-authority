@@ -88,8 +88,12 @@ export default {
                         }),
                     })
                 }
-
-                yield call(service.logout)
+                try {
+                    yield call(service.logout)
+                    
+                } catch (error) {
+                    
+                }
 
             }
         },
