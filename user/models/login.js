@@ -4,6 +4,7 @@ import service from "../service"
 import { reloadAuthorized } from "@/outter/fr-schema-antd-utils/src/utils/Authorized"
 import { setAuthority } from "@/outter/fr-schema-antd-utils/src/utils/authority"
 import { getPageQuery } from "@/outter/fr-schema-antd-utils/src/utils/utils"
+import { message } from "antd"
 
 function deleteAllCookies() {
     let cookies = document.cookie.split(";");
@@ -30,7 +31,12 @@ export default {
             sessionStorage.clear()
 
             let token = null
-            token = yield call(service.login, payload)
+            try {
+                token = yield call(service.login, payload)
+                
+            } catch (error) {
+                message.error("登录出错")
+            }
             if (token && token.data) {
                 token.data.expires = token.expires.getTime()
                 localStorage.setItem("token", JSON.stringify(token.data))
