@@ -62,7 +62,7 @@ service.editRole = async (params) => {
 }
 
 service.editPwd = async (params) => {
-    const res = await createApi(`user_auth/user/password_for_admin`, '', '', '').patch({...params, new_password: params.password})
+    const res = await createApi(`user_auth/user/password/reset`, '', '', '').post({...params, new_password: params.password})
     return res
 }
 
