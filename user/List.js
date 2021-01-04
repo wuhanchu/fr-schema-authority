@@ -1,22 +1,21 @@
 import frSchema from '@/outter/fr-schema/src';
-
 import schema from './schema';
 import service from './service';
 import { Fragment } from 'react';
+import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
-
-import { Divider, message, Popconfirm, Button } from 'antd';
-import roleService from '../role/service';
+import { Divider, message, Popconfirm, Select } from 'antd';
+import InfoModal from '@/outter/fr-schema-antd-utils/src/components/Page/InfoModal';
+import Authorized from '@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized';
+import roleservice from '../role/service';
 import clone from 'clone';
 
 import departmentService from '../department/service';
+import ListPage from '@/outter/fr-schema-antd-utils/src/components/Page/ListPage';
 
-const { Authorized } = frSchemaUtils.components;
-const { InfoModal } = frSchemaUtils.components;
+const { utils, actions, schemaFieldType } = frSchema;
 
-const { ListPage } = frSchemaUtils.components;
-const { utils, actions } = frSchema;
+const { Option } = Select;
 
 /**
  * 通话记录
@@ -25,7 +24,6 @@ export class User extends ListPage {
     constructor(props) {
         super(props, {
             schema: clone(schema),
-            showSelect: true,
             authorityKey: 'user',
             infoProps: {
                 offline: true,
@@ -37,7 +35,6 @@ export class User extends ListPage {
     componentDidMount = async () => {
         await this.handleGetRoleList();
         await this.handleGetDepartmentList();
-        this.setState({ init: true });
         super.componentDidMount();
     };
 
@@ -55,10 +52,7 @@ export class User extends ListPage {
         for (let i = 0; i < data.roles.length; i++) {
             rolelist.push(this.state.roleList[data.roles[i]].id);
         }
-        await this.service.editRole({
-            id: data.id || this.state.selectedRows.map((item) => item.id),
-            role_ids: rolelist,
-        });
+        await this.service.editRole({ id: data.id, role_ids: rolelist });
         // 更新
         this.refreshList();
         message.success('修改成功');
@@ -66,20 +60,49 @@ export class User extends ListPage {
     };
 
     handleGetDepartmentList = async () => {
-        const response = await departmentService.get({ pageSize: 9999 });
+        const response = await departmentService.get();
         let data = utils.dict.listToDict(response.list, null, 'key', 'name');
 
         this.schema.department_key.dict = data;
     };
 
     handleGetRoleList = async () => {
-        const roleList = await roleService.get({ pageSize: 9999 });
+        const roleList = await roleservice.get();
         let data = utils.dict.listToDict(roleList.list, null, 'id', 'chinese_name');
         this.schema.roles.dict = data;
         this.setState({
             roleList: data,
         });
     };
+    handleVisiblePwdModal = (flag, record, action) => {
+        this.setState({
+            visiblePwdModal: !!flag,
+            infoData: record,
+            action,
+        })
+    }
+
+    async handleEditPwd(data, schema) {
+        // 更新
+        let response
+        if (!this.props.offline) {
+            response = await this.service.editPwd(data, schema)
+        } else {
+            // 修改当前数据
+            this.state.data.list.push(decorateItem(data, this.schema))
+            this.setState({
+                data: this.state.data,
+            })
+        }
+
+        this.refreshList()
+        message.success("修改成功")
+        this.handleVisiblePwdModal()
+        this.handleChangeCallback && this.handleChangeCallback()
+        this.props.handleChangeCallback && this.props.handleChangeCallback()
+
+        return response
+    }
 
     renderOperateColumn(props = {}) {
         const { scroll } = this.meta;
@@ -97,21 +120,17 @@ export class User extends ListPage {
                                     authority={this.meta.authority && this.meta.authority.update}
                                     noMatch={null}
                                 >
-                                    <a
-                                        onClick={() =>
-                                            this.handleVisibleModal(true, record, actions.edit)
-                                        }
-                                    >
-                                        修改
-                                    </a>
+                                    <a onClick={() => this.handleVisibleModal(true, record, actions.edit)}>修改</a>
                                 </Authorized>
                             )}
+
+                            
                             {showDelete && (
                                 <Authorized
                                     authority={this.meta.authority && this.meta.authority.delete}
                                     noMatch={null}
                                 >
-                                    <Divider type="vertical" />
+                                    <Divider type="vertical"/>
                                     <Popconfirm
                                         title="删除用户会影响相关数据的显示，确认删除？"
                                         onConfirm={(e) => {
@@ -123,16 +142,13 @@ export class User extends ListPage {
                                     </Popconfirm>
                                 </Authorized>
                             )}
-                            <Authorized authority={'user_role_put'} noMatch={null}>
-                                <Divider type="vertical" />
-                                <a
-                                    onClick={() => {
-                                        this.setState({ editRoleVisible: true, record: record });
-                                    }}
+                            <Divider type="vertical"/>
+                                <Authorized
+                                    authority={this.meta.authority && this.meta.authority.update}
+                                    noMatch={null}
                                 >
-                                    分配角色
-                                </a>
-                            </Authorized>
+                                    <a onClick={() => this.handleVisiblePwdModal(true, record, actions.edit)}>修改密码</a>
+                                </Authorized>
                             {this.renderOperateColumnExtend(record)}
                         </Fragment>
                     ),
@@ -140,21 +156,67 @@ export class User extends ListPage {
         );
     }
 
-    renderOperationMulit() {
+    // 扩展栏拨号按钮
+    renderOperateColumnExtend(record) {
+        if (record.name == 'admin') return null;
         return (
-            <span>
-                <Button
-                    onClick={(e) => {
-                        this.setState({
-                            editRoleVisible: true,
-                        });
+            <Authorized authority={'user_role_put'} noMatch={null}>
+                <Divider type="vertical"/>
+                <a
+                    onClick={() => {
+                        this.setState({ editRoleVisible: true, record: record });
                     }}
                 >
-                    批量分配角色
-                </Button>
-            </span>
+                    分配角色
+                </a>
+            </Authorized>
         );
     }
+
+        /**
+     * 渲染信息弹出框
+     * @param customProps 定制的属性
+     * @returns {*}
+     */
+    renderPwdModal(customProps = {}) {
+        const { form } = this.props
+        const renderForm = this.props.renderForm || this.renderForm
+        const { resource, title, addArgs } = this.meta
+        const { visiblePwdModal, infoData, action } = this.state
+        const updateMethods = {
+            handleVisibleModal: this.handleVisiblePwdModal.bind(this),
+            handleUpdate: this.handleUpdate.bind(this),
+            handleAdd: this.handleEditPwd.bind(this),
+        }
+
+        return (
+            visiblePwdModal && (
+                <InfoModal
+                    renderForm={renderForm}
+                    title={title}
+                    action={"add"}
+                    resource={resource}
+                    {...updateMethods}
+                    visible={visiblePwdModal}
+                    values={infoData}
+                    addArgs={addArgs}
+                    meta={this.meta}
+                    service={this.service}
+                    schema={{password: {
+                        title: "密码",
+                        required: true,
+                        listHide: true,
+                        editHide: true,
+                        type: schemaFieldType.Password,
+                    }}}
+                    {...this.meta.infoProps}
+                    {...customProps}
+                />
+            )
+        )
+    }
+
+
 
     renderExtend() {
         const renderForm = this.renderForm;
@@ -166,34 +228,12 @@ export class User extends ListPage {
         };
         const { id, name, roles } = this.schema;
 
-        let schema = {
-            id: {
-                ...id,
-                title: 'id',
-                editHide: true,
-                readOnly: true,
-            },
-            name: {
-                ...name,
-                required: false,
-                readOnly: true,
-            },
-            roles: {
-                ...roles,
-                dict: this.state.roleList,
-                required: true,
-                editHide: false,
-                infoHide: false,
-            },
-        };
-        if (!record) {
-            delete schema.name;
-        }
-
         return (
+            <>{
             editRoleVisible && (
                 <InfoModal
                     renderForm={renderForm}
+                    // form={this.props.from}
                     title={'用户角色分配'}
                     action={frSchema.actions.edit}
                     resource={resource}
@@ -202,52 +242,40 @@ export class User extends ListPage {
                     visible={editRoleVisible}
                     addArgs={addArgs}
                     meta={this.meta}
-                    schema={schema}
+                    schema={{
+                        id: {
+                            ...id,
+                            title: 'id',
+                            editHide: true,
+                            readOnly: true,
+                        },
+                        name: {
+                            ...name,
+                            required: false,
+                            // editHide: true,
+                            readOnly: true,
+                        },
+                        roles: {
+                            ...roles,
+                            dict: this.state.roleList,
+                            required: true,
+                            editHide: false,
+                            infoHide: false,
+                        },
+                    }}
                 />
-            )
+            )}
+            {this.renderPwdModal()}
+            </>
         );
-    }
-
-    /**
-     * 处理数据新增
-     * @param data
-     * @returns {Promise<void>}
-     */
-    async handleAdd(data, schema) {
-        // 更新
-        let response;
-        if (!this.props.offline) {
-            try {
-                response = await this.service.post(data, schema);
-                message.success('添加成功');
-            } catch (error) {
-                message.error(error.message);
-            }
-        } else {
-            // 修改当前数据
-            this.state.data.list.push(decorateItem(data, this.schema));
-            this.setState({
-                data: this.state.data,
-            });
-        }
-
-        this.refreshList();
-        this.handleVisibleModal();
-        this.handleChangeCallback && this.handleChangeCallback();
-        this.props.handleChangeCallback && this.props.handleChangeCallback();
-
-        return response;
     }
 
     // 搜索
     renderSearchBar() {
-        if (!this.state.init) {
-            return null;
-        }
-        const { name, department_key } = this.schema;
-        const filters = this.createFilters({ name, department_key }, 4);
+        const { name } = this.schema;
+        const filters = this.createFilters({ name }, 5);
         return this.createSearchBar(filters);
     }
 }
 
-export default User;
+export default Form.create()(User);

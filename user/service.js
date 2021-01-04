@@ -1,6 +1,6 @@
 import schema from "./schema"
 
-import frSchema, { config } from "@/outter/fr-schema/src"
+import frSchema from "@/outter/fr-schema/src"
 
 const { createApi, createBasicApi, oauth, utils } = frSchema
 
@@ -8,8 +8,6 @@ const { request } = utils
 
 // 用户
 let service = createApi("user_auth/user", schema, {}, "eq.")
-service.get = createApi("user_auth/user_extend", schema, {}, "eq.").get
-service.sync = createApi("user_auth/phfund/user/sync").post
 
 const convertRole = (item) => {
     return {
@@ -32,24 +30,13 @@ service.login = (params) => {
         })
 }
 
-service.logout = () => {
-    return request(
-        {
-            method: "DELETE",
-            url: (
-                "/" +
-                config.apiVersion + "token"
-            ).replace("//", "/"),
-        }
-    )
-}
-
 /**
  * 查询当前用户
  * @returns {Promise<void>}
  */
 service.queryCurrent = async () => {
     const response = await createBasicApi("user_auth/user/current").get()
+
     return response
 }
 
@@ -70,8 +57,18 @@ service.queryRoleList = async (params) => {
 }
 
 service.editRole = async (params) => {
-    console.debug("user editRole params", params)
-    return await createApi(`user_auth/user/role`).put(params)
+    const res = await createApi(`user_auth/user/role`).put(params)
+    return res
+}
+
+service.editPwd = async (params) => {
+    const res = await createApi(`user_auth/user/password_for_admin`, '', '', '').patch({...params, new_password: params.password})
+    return res
+}
+
+service.editMyPwd = async (params) => {
+    const res = await createApi(`user_auth/user/password`, '', '', '').patch(params)
+    return res
 }
 
 export default service
