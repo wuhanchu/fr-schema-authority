@@ -4,7 +4,7 @@ import '@ant-design/compatible/assets/index.css';
 import clone from 'clone';
 import frSchemaUtils from '@/outter/fr-schema-antd-utils/src';
 
-const { DataList } = frSchemaUtils.components;
+const { DataList, ListPage } = frSchemaUtils.components;
 
 export class List extends DataList {
     constructor(props) {
