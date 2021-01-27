@@ -160,12 +160,15 @@ export class User extends DataList {
     // 扩展栏拨号按钮
     renderOperateColumnExtend(record) {
         if (record.name == 'admin') return null;
+        let roles = record.roles && record.roles.split(',').map((item, index)=>{
+            return parseInt(item)
+        })
         return (
             <Authorized authority={'user_role_put'} noMatch={null}>
                 <Divider type="vertical"/>
                 <a
                     onClick={() => {
-                        this.setState({ editRoleVisible: true, record: record });
+                        this.setState({ editRoleVisible: true, record: {...record, roles: roles} });
                     }}
                 >
                     分配角色
