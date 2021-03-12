@@ -7,7 +7,7 @@ export class List extends PureComponent {
     render() {
         return (
             <PageHeaderWrapper>
-                <DataList/>
+                <DataList />
             </PageHeaderWrapper>
         );
     }

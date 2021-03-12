@@ -1,22 +1,18 @@
 import frSchema from '@/outter/fr-schema/src';
-import schema from './schema';
-import service from './service';
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Divider, message, Popconfirm, Select } from 'antd';
+import { Button, Divider, message, Popconfirm } from 'antd';
 import InfoModal from '@/outter/fr-schema-antd-utils/src/components/Page/InfoModal';
 import Authorized from '@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized';
-import roleservice from '../role/service';
 import clone from 'clone';
-
-import departmentService from '../department/service';
 import DataList from '@/outter/fr-schema-antd-utils/src/components/Page/DataList';
-import ListPage from '@/outter/fr-schema-antd-utils/src/components/Page/ListPage';
+import schema from './schema';
+import departmentService from '../department/service';
+import roleservice from '../role/service';
+import service from './service';
 
 const { utils, actions, schemaFieldType } = frSchema;
-
-const { Option } = Select;
 
 /**
  * 通话记录
@@ -25,11 +21,12 @@ export class User extends DataList {
     constructor(props) {
         super(props, {
             schema: clone(schema),
+            showSelect: true,
             authorityKey: 'user',
             infoProps: {
                 offline: true,
             },
-            service: service,
+            service,
         });
     }
 
@@ -37,6 +34,49 @@ export class User extends DataList {
         await this.handleGetRoleList();
         await this.handleGetDepartmentList();
         super.componentDidMount();
+    };
+
+    renderOperationMulit() {
+        return (
+            <>
+                <span>
+                    <Popconfirm
+                        title="是否要启用选中的用户？"
+                        onConfirm={() => {
+                            const { selectedRows } = this.state;
+                            this.handleEnableMulti(selectedRows, true);
+                        }}
+                    >
+                        <Button>批量启用</Button>
+                    </Popconfirm>
+                </span>
+                <span>
+                    <Popconfirm
+                        title="是否要禁用选中的用户？"
+                        onConfirm={() => {
+                            const { selectedRows } = this.state;
+                            this.handleEnableMulti(selectedRows, false);
+                        }}
+                    >
+                        <Button>批量禁用</Button>
+                    </Popconfirm>
+                </span>
+            </>
+        );
+    }
+
+    handleEnableMulti = async (recordList, enable) => {
+        // change current data
+        const valueList = recordList.map((record) => record.id);
+        const args = {};
+        args.id = `in.(${valueList.join(',')})`;
+        await this.service.enableMulti({ ...args, enable });
+
+        //  refresh current data
+        this.refreshList();
+        message.success('修改成功');
+        this.handleChangeCallback && this.handleChangeCallback();
+        this.props.handleChangeCallback && this.props.handleChangeCallback();
     };
 
     handleRoleVisibleModal = (flag, record, action) => {
@@ -47,9 +87,9 @@ export class User extends DataList {
         });
     };
 
-    handleRoleUpdate = async (data, schema) => {
+    handleRoleUpdate = async (data) => {
         // 修改当前数据
-        let rolelist = [];
+        const rolelist = [];
         for (let i = 0; i < data.roles.length; i++) {
             rolelist.push(this.state.roleList[data.roles[i]].id);
         }
@@ -62,47 +102,38 @@ export class User extends DataList {
 
     handleGetDepartmentList = async () => {
         const response = await departmentService.get();
-        let data = utils.dict.listToDict(response.list, null, 'key', 'name');
+        const data = utils.dict.listToDict(response.list, null, 'key', 'name');
 
         this.schema.department_key.dict = data;
     };
 
     handleGetRoleList = async () => {
         const roleList = await roleservice.get();
-        let data = utils.dict.listToDict(roleList.list, null, 'id', 'chinese_name');
+        const data = utils.dict.listToDict(roleList.list, null, 'id', 'chinese_name');
         this.schema.roles.dict = data;
         this.setState({
             roleList: data,
         });
     };
+
     handleVisiblePwdModal = (flag, record, action) => {
         this.setState({
             visiblePwdModal: !!flag,
             infoData: record,
             action,
-        })
-    }
+        });
+    };
 
-    async handleEditPwd(data, schema) {
+    async handleEditPwd(data, schemas) {
         // 更新
-        let response
-        if (!this.props.offline) {
-            response = await this.service.editPwd(data, schema)
-        } else {
-            // 修改当前数据
-            this.state.data.list.push(decorateItem(data, this.schema))
-            this.setState({
-                data: this.state.data,
-            })
-        }
+        const response = await this.service.editPwd(data, schemas);
+        this.refreshList();
+        message.success('修改成功');
+        this.handleVisiblePwdModal();
+        this.handleChangeCallback && this.handleChangeCallback();
+        this.props.handleChangeCallback && this.props.handleChangeCallback();
 
-        this.refreshList()
-        message.success("修改成功")
-        this.handleVisiblePwdModal()
-        this.handleChangeCallback && this.handleChangeCallback()
-        this.props.handleChangeCallback && this.props.handleChangeCallback()
-
-        return response
+        return response;
     }
 
     renderOperateColumn(props = {}) {
@@ -114,24 +145,29 @@ export class User extends DataList {
                 title: '操作',
                 fixed: scroll && 'right',
                 render: (text, record) =>
-                    record.name != 'admin' && (
+                    record.name !== 'admin' && (
                         <Fragment>
                             {showEdit && (
                                 <Authorized
                                     authority={this.meta.authority && this.meta.authority.update}
                                     noMatch={null}
                                 >
-                                    <a onClick={() => this.handleVisibleModal(true, record, actions.edit)}>修改</a>
+                                    <a
+                                        onClick={() =>
+                                            this.handleVisibleModal(true, record, actions.edit)
+                                        }
+                                    >
+                                        修改
+                                    </a>
                                 </Authorized>
                             )}
-
 
                             {showDelete && (
                                 <Authorized
                                     authority={this.meta.authority && this.meta.authority.delete}
                                     noMatch={null}
                                 >
-                                    <Divider type="vertical"/>
+                                    <Divider type="vertical" />
                                     <Popconfirm
                                         title="删除用户会影响相关数据的显示，确认删除？"
                                         onConfirm={(e) => {
@@ -143,12 +179,18 @@ export class User extends DataList {
                                     </Popconfirm>
                                 </Authorized>
                             )}
-                            <Divider type="vertical"/>
+                            <Divider type="vertical" />
                             <Authorized
                                 authority={this.meta.authority && this.meta.authority.update}
                                 noMatch={null}
                             >
-                                <a onClick={() => this.handleVisiblePwdModal(true, record, actions.edit)}>修改密码</a>
+                                <a
+                                    onClick={() =>
+                                        this.handleVisiblePwdModal(true, record, actions.edit)
+                                    }
+                                >
+                                    修改密码
+                                </a>
                             </Authorized>
                             {this.renderOperateColumnExtend(record)}
                         </Fragment>
@@ -159,16 +201,21 @@ export class User extends DataList {
 
     // 扩展栏拨号按钮
     renderOperateColumnExtend(record) {
-        if (record.name == 'admin') return null;
-        let roles = record.roles && record.roles.split(',').map((item, index)=>{
-            return parseInt(item)
-        })
+        if (record.name === 'admin') return null;
+        const roles =
+            record.roles &&
+            record.roles.split(',').map((item) => {
+                return parseInt(item, 10);
+            });
         return (
-            <Authorized authority={'user_role_put'} noMatch={null}>
-                <Divider type="vertical"/>
+            <Authorized authority="user_role_put" noMatch={null}>
+                <Divider type="vertical" />
                 <a
                     onClick={() => {
-                        this.setState({ editRoleVisible: true, record: {...record, roles: roles} });
+                        this.setState({
+                            editRoleVisible: true,
+                            record: { ...record, roles },
+                        });
                     }}
                 >
                     分配角色
@@ -183,22 +230,21 @@ export class User extends DataList {
      * @returns {*}
      */
     renderPwdModal(customProps = {}) {
-        const { form } = this.props
-        const renderForm = this.props.renderForm || this.renderForm
-        const { resource, title, addArgs } = this.meta
-        const { visiblePwdModal, infoData, action } = this.state
+        const renderForm = this.props.renderForm || this.renderForm;
+        const { resource, title, addArgs } = this.meta;
+        const { visiblePwdModal, infoData } = this.state;
         const updateMethods = {
             handleVisibleModal: this.handleVisiblePwdModal.bind(this),
             handleUpdate: this.handleUpdate.bind(this),
             handleAdd: this.handleEditPwd.bind(this),
-        }
+        };
 
         return (
             visiblePwdModal && (
                 <InfoModal
                     renderForm={renderForm}
                     title={title}
-                    action={"add"}
+                    action="add"
                     resource={resource}
                     {...updateMethods}
                     visible={visiblePwdModal}
@@ -206,25 +252,25 @@ export class User extends DataList {
                     addArgs={addArgs}
                     meta={this.meta}
                     service={this.service}
-                    schema={{password: {
-                            title: "密码",
+                    schema={{
+                        password: {
+                            title: '密码',
                             required: true,
                             listHide: true,
                             editHide: true,
                             type: schemaFieldType.Password,
-                        }}}
+                        },
+                    }}
                     {...this.meta.infoProps}
                     {...customProps}
                 />
             )
-        )
+        );
     }
 
-
-
     renderExtend() {
-        const renderForm = this.renderForm;
-        const { resource, title, addArgs } = this.meta;
+        const { renderForm } = this;
+        const { resource, addArgs } = this.meta;
         const { editRoleVisible, record } = this.state;
         const updateMethods = {
             handleVisibleModal: this.handleRoleVisibleModal,
@@ -233,12 +279,12 @@ export class User extends DataList {
         const { id, name, roles } = this.schema;
 
         return (
-            <>{
-                editRoleVisible && (
+            <>
+                {editRoleVisible && (
                     <InfoModal
                         renderForm={renderForm}
                         // form={this.props.from}
-                        title={'用户角色分配'}
+                        title="用户角色分配"
                         action={frSchema.actions.edit}
                         resource={resource}
                         {...updateMethods}
