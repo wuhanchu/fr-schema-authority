@@ -47,7 +47,7 @@ export class User extends DataList {
                             this.handleEnableMulti(selectedRows, true);
                         }}
                     >
-                        <Button>批量启用</Button>
+                        <Button>启用</Button>
                     </Popconfirm>
                 </span>
                 <span>
@@ -58,7 +58,7 @@ export class User extends DataList {
                             this.handleEnableMulti(selectedRows, false);
                         }}
                     >
-                        <Button>批量禁用</Button>
+                        <Button>禁用</Button>
                     </Popconfirm>
                 </span>
             </>
