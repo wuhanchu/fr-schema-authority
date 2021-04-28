@@ -4,7 +4,7 @@ import service from './service';
 import { Fragment } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Divider, message, Popconfirm, Select } from 'antd';
+import { Divider, message, Popconfirm, Select, Button } from 'antd';
 import InfoModal from '@/outter/fr-schema-antd-utils/src/components/Page/InfoModal';
 import Authorized from '@/outter/fr-schema-antd-utils/src/components/Authorized/Authorized';
 import roleservice from '../role/service';
@@ -12,11 +12,8 @@ import clone from 'clone';
 
 import departmentService from '../department/service';
 import DataList from '@/outter/fr-schema-antd-utils/src/components/Page/DataList';
-import ListPage from '@/outter/fr-schema-antd-utils/src/components/Page/ListPage';
 
 const { utils, actions, schemaFieldType } = frSchema;
-
-const { Option } = Select;
 
 /**
  * 通话记录
@@ -155,6 +152,19 @@ export class User extends DataList {
                     ),
             }
         );
+    }
+
+    renderOperationButtons() {
+        return <Button
+            type="primary"
+            onClick={async () => {
+                await this.service.sync()
+                message.info("任务已创建，请等待几分钟以后,刷新数据")
+            }}
+        >
+            同步数据
+        </Button>
+
     }
 
     // 扩展栏拨号按钮

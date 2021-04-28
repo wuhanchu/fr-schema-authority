@@ -8,6 +8,7 @@ const { request } = utils
 
 // 用户
 let service = createApi("user_auth/user", schema, {}, "eq.")
+service.sync = createApi("user_auth/phfund/user/sync").post
 
 const convertRole = (item) => {
     return {
