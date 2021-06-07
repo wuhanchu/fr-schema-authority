@@ -101,9 +101,8 @@ export class User extends DataList {
     };
 
     handleGetDepartmentList = async () => {
-        const response = await departmentService.get();
-        const data = utils.dict.listToDict(response.list, null, 'key', 'name');
-
+        const response = await departmentService.get({ limit: 10000 });
+        const data = utils.dict.listToDict(response.list, null, 'key', 'name')
         this.schema.department_key.dict = data;
     };
 
