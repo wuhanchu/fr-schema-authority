@@ -36,17 +36,13 @@ export class List extends DataList {
     handleUpdate = async (data, schema, method = 'patch') => {
         // 更新
         let response;
-        let grant_type = '';
+        let grant_type = JSON.stringify(data.grant_type);
         const client_metadata = {
             grant_type: data.grant_type,
             scope: data.scope,
             response_types: data.response_type,
         };
-        data.grant_type.map((item) => {
-            grant_type += `${item}\n`;
-            return item;
-        });
-        grant_type = grant_type.replace(/\n$/, '');
+
         if (!this.props.offline) {
             response = await this.service[method]({ ...data, grant_type, client_metadata }, schema);
         }

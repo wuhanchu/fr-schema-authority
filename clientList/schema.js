@@ -11,6 +11,7 @@ export default {
     client_id: {
         title: '编号',
         editHide:true,
+        addHide: true,
         required: true,
     },
     scope: {
@@ -19,6 +20,14 @@ export default {
     },
     response_type: {
         title: '返回类型',
+        required: true,
+    },
+    client_secret: {
+        title: '密码',
+        listHide: true,
+        addHide: true,
+        // editHide: true,
+        readOnly: true,
         required: true,
     },
     grant_type: {
