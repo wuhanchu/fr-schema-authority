@@ -23,7 +23,7 @@ export class List extends DataList {
                 offline: true,
             },
             service,
-            addHide: true,
+            // addHide: true,
             showDelete: false,
         });
     }
