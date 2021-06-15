@@ -6,20 +6,24 @@ export default {
     client_name: {
         title: '名称',
         required: true,
+        sorter: true,
         searchPrefix: 'like',
     },
     client_id: {
         title: '编号',
+        sorter: true,
         editHide:true,
         addHide: true,
         required: true,
     },
     scope: {
         title: '范围',
+        sorter: true,
         required: true,
     },
     response_type: {
         title: '返回类型',
+        sorter: true,
         required: true,
     },
     client_secret: {
