@@ -38,7 +38,7 @@ export class List extends DataList {
         let response;
         let grant_type = JSON.stringify(data.grant_type);
         const client_metadata = {
-            grant_type: data.grant_type,
+            grant_types: data.grant_type,
             scope: data.scope,
             response_types: data.response_type,
         };
